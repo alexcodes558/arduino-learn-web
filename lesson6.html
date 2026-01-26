@@ -1,35 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lesson 6 – Tinkercad Style</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 6 – Tinkercad Simulation</title>
 
 <style>
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #f2f2f2;
+  background: #e0e0e0;
 }
-
 .topbar {
   background: #1e1e1e;
   color: white;
-  padding: 10px 16px;
+  padding: 12px 16px;
   font-weight: bold;
+  text-align: center;
 }
-
 .workspace {
   display: flex;
   flex-wrap: wrap;
+  padding: 16px;
 }
-
 .board-area {
   flex: 1;
   min-width: 320px;
   padding: 16px;
 }
-
 .code-area {
   flex: 1;
   min-width: 320px;
@@ -37,186 +35,196 @@ body {
   background: #fff;
   border-left: 3px solid #ccc;
 }
-
 .arduino {
   background: #2c7dc9;
   color: white;
   padding: 14px;
   border-radius: 12px;
   margin-bottom: 20px;
+  text-align: center;
 }
-
 .breadboard {
-  background: #eee;
-  padding: 14px;
-  border-radius: 12px;
+  background: #f9f9f9;
   border: 2px solid #ccc;
+  border-radius: 12px;
+  padding: 14px;
 }
-
-.component {
-  margin: 10px 0;
+.row {
+  display: flex;
+  justify-content: center;
+  margin: 4px 0;
 }
-
-.led {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #555;
-  margin: auto;
-  border: 2px solid #222;
-}
-
-.led.on {
-  background: red;
-  box-shadow: 0 0 15px red;
-}
-
-.wire {
-  display: inline-block;
-  padding: 8px;
-  background: orange;
-  border-radius: 6px;
-  margin: 6px;
+.pin {
+  width: 20px;
+  height: 20px;
+  background: #ddd;
+  margin: 1px;
+  border-radius: 4px;
+  border: 1px solid #aaa;
   cursor: grab;
 }
-
+.led {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: gray;
+  margin: 0 auto;
+  border: 2px solid #222;
+}
+.led.on {
+  background: red;
+  box-shadow: 0 0 12px red;
+}
+.wire {
+  width: 40px;
+  height: 6px;
+  border-radius: 3px;
+  margin: 4px;
+  cursor: grab;
+  display: inline-block;
+}
+.wire.red { background: red; }
+.wire.blue { background: blue; }
+.wire.green { background: green; }
 .sensor {
   margin-top: 16px;
 }
-
 textarea {
   width: 100%;
-  height: 160px;
+  height: 140px;
   font-family: monospace;
+  margin-bottom: 10px;
 }
-
 button {
   width: 100%;
   padding: 12px;
-  margin-top: 10px;
   font-size: 16px;
+  margin-top: 10px;
   background: #2c7dc9;
   color: white;
   border: none;
   border-radius: 6px;
 }
-
 .status {
   margin-top: 10px;
   font-weight: bold;
 }
+a { margin-right: 10px; }
 </style>
 </head>
 
 <body>
-
-<div class="topbar">
-  Arduino Simulator (Tinkercad-Style)
-</div>
+<div class="topbar">Arduino Simulator – Tinkercad Style</div>
 
 <div class="workspace">
-
-  <!-- LEFT: BOARD -->
+  <!-- LEFT: Board & Breadboard -->
   <div class="board-area">
-
     <div class="arduino">
       Arduino UNO
-      <div class="wire" draggable="true" data-pin="A0">A0 Wire</div>
+      <div class="wire red" draggable="true" data-pin="A0"></div>
+      <div class="wire blue" draggable="true" data-pin="D3"></div>
     </div>
 
     <div class="breadboard">
       <h3>Breadboard</h3>
 
+      <!-- Rows -->
+      <div class="row" id="row1"></div>
+      <div class="row" id="row2"></div>
+      <div class="row" id="row3"></div>
+      <div class="row" id="row4"></div>
+
+      <!-- LED -->
       <div class="component">
         LED (D3)
         <div class="led" id="led"></div>
       </div>
 
+      <!-- Sensor -->
       <div class="sensor">
         <label>Sensor (A0):</label><br>
         <input type="range" id="sensor" min="0" max="1023" value="200">
         <span id="sensorValue">200</span>
       </div>
-    </div>
 
-    <div class="status" id="status">
-      No wire connected
     </div>
-
+    <div class="status" id="status">No wire connected</div>
   </div>
 
-  <!-- RIGHT: CODE -->
+  <!-- RIGHT: Code -->
   <div class="code-area">
     <h3>Arduino Code</h3>
-
-<textarea id="code">
-int value = analogRead(A0);
-
-if (value > 500) {
-  digitalWrite(3, HIGH);
-} else {
-  digitalWrite(3, LOW);
-}
+    <textarea id="code">
+// Example:
+// int value = analogRead(A0);
+// if(value > 500) { digitalWrite(3, HIGH); } else { digitalWrite(3, LOW); }
 </textarea>
-
-    <button onclick="run()">Start Simulation</button>
+    <button onclick="run()">Run Simulation</button>
 
     <br><br>
-    <a href="lesson5.html">← Lesson 5</a> |
+    <a href="lesson5.html">← Lesson 5</a>
     <a href="index.html">Home</a>
   </div>
-
 </div>
 
 <script>
-let wired = false;
 const led = document.getElementById("led");
 const sensor = document.getElementById("sensor");
 const sensorValue = document.getElementById("sensorValue");
 const status = document.getElementById("status");
+let wired = {A0:false, D3:false};
 
-sensor.oninput = () => {
-  sensorValue.textContent = sensor.value;
-};
+sensor.oninput = () => { sensorValue.textContent = sensor.value; };
 
-document.querySelector(".wire").addEventListener("dragstart", e => {
-  e.dataTransfer.setData("pin", "A0");
+// Drag and drop wires
+document.querySelectorAll(".wire").forEach(wire => {
+  wire.addEventListener("dragstart", e => {
+    e.dataTransfer.setData("pin", wire.dataset.pin);
+  });
 });
 
 led.addEventListener("dragover", e => e.preventDefault());
-
 led.addEventListener("drop", e => {
   e.preventDefault();
-  wired = true;
-  status.textContent = "Sensor wired to A0";
+  const pin = e.dataTransfer.getData("pin");
+  wired[pin] = true;
+  status.textContent = `LED wired. Wires: ${JSON.stringify(wired)}`;
 });
 
 function run() {
-  if (!wired) {
-    alert("Connect A0 to the LED first!");
+  // Check wiring
+  if(!wired["A0"] || !wired["D3"]) {
+    alert("Connect A0 (sensor) and D3 (LED) first!");
     return;
   }
 
   const code = document.getElementById("code").value;
   const val = parseInt(sensor.value);
 
+  // Parse threshold
   const match = code.match(/value\s*>\s*(\d+)/);
-  if (!match) {
-    alert("Missing condition: value > ?");
-    return;
-  }
-
+  if(!match) { alert("Code must contain value > ?"); return; }
   const threshold = parseInt(match[1]);
 
-  if (val > threshold) {
+  if(val > threshold) {
     led.classList.add("on");
-    status.textContent = "LED ON (sensor=" + val + ")";
+    status.textContent = `LED ON (sensor=${val})`;
   } else {
     led.classList.remove("on");
-    status.textContent = "LED OFF (sensor=" + val + ")";
+    status.textContent = `LED OFF (sensor=${val})`;
+  }
+}
+
+// Build breadboard rows dynamically
+for(let i=1;i<=4;i++){
+  const row = document.getElementById("row"+i);
+  for(let j=0;j<20;j++){
+    const pin = document.createElement("div");
+    pin.classList.add("pin");
+    row.appendChild(pin);
   }
 }
 </script>
-
 </body>
 </html>
+
