@@ -3,109 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arduino Project Playground</title>
+<title>Arduino Interactive Course – Full Playground</title>
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #e0e0e0;
-}
-.topbar {
-  background: #1e1e1e;
-  color: white;
-  padding: 12px 16px;
-  font-weight: bold;
-  text-align: center;
-}
-.workspace {
-  display: flex;
-  flex-wrap: wrap;
-}
-.board-area {
-  flex: 2;
-  min-width: 320px;
-  padding: 16px;
-}
-.control-panel {
-  flex: 1;
-  min-width: 320px;
-  padding: 16px;
-  background: #fff;
-  border-left: 3px solid #ccc;
-}
-.arduino {
-  background: #2c7dc9;
-  color: white;
-  padding: 14px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  text-align: center;
-}
-.pin {
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  background: #ddd;
-  margin: 2px;
-  border-radius: 4px;
-  border: 1px solid #aaa;
-  cursor: grab;
-}
-.breadboard {
-  background: #f9f9f9;
-  border: 2px solid #ccc;
-  border-radius: 12px;
-  padding: 14px;
-  margin-bottom: 20px;
-}
-.row {
-  display: flex;
-  justify-content: center;
-  margin: 2px 0;
-}
-.component {
-  margin: 10px 0;
-  text-align: center;
-}
-.led {
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  background: gray;
-  border: 2px solid #222;
-  margin: 0 auto;
-}
-.led.on { background: red; box-shadow: 0 0 10px red; }
-.sensor, .button, .slider {
-  margin: 6px auto;
-}
-textarea {
-  width: 100%;
-  height: 140px;
-  font-family: monospace;
-  margin-bottom: 10px;
-}
-button {
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  margin-top: 10px;
-  background: #2c7dc9;
-  color: white;
-  border: none;
-  border-radius: 6px;
-}
-.status { margin-top: 10px; font-weight: bold; }
+body { margin:0; font-family:Arial,sans-serif; background:#e0e0e0; }
+.topbar { background:#1e1e1e; color:white; padding:12px 16px; text-align:center; font-weight:bold; }
+.workspace { display:flex; flex-wrap:wrap; }
+.board-area { flex:2; min-width:320px; padding:16px; position:relative; }
+.control-panel { flex:1; min-width:320px; padding:16px; background:#fff; border-left:3px solid #ccc; }
+.arduino { background:#2c7dc9; color:white; padding:14px; border-radius:12px; margin-bottom:20px; text-align:center; }
+.pin { display:inline-block; width:24px; height:24px; background:#ddd; margin:2px; border-radius:4px; border:1px solid #aaa; cursor:grab; font-size:10px; text-align:center; line-height:24px; }
+.breadboard { background:#f9f9f9; border:2px solid #ccc; border-radius:12px; padding:14px; margin-bottom:20px; display:flex; flex-wrap:wrap; position:relative; min-height:300px;}
+.component { margin:6px; text-align:center; position:relative; cursor:grab; }
+.led, .rgb-led { width:25px; height:25px; border-radius:50%; border:2px solid #222; background:gray; }
+.led.on { background:red; box-shadow:0 0 10px red; }
+.rgb-led.on { background:green; box-shadow:0 0 10px green; }
+.button, .sensor, .slider, .resistor, .buzzer, .motor { margin:6px; display:block; }
+textarea { width:100%; height:140px; font-family: monospace; margin-bottom:10px; }
+button { width:100%; padding:12px; font-size:16px; margin-top:10px; background:#2c7dc9; color:white; border:none; border-radius:6px; }
+.status { margin-top:10px; font-weight:bold; }
+svg { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
 </style>
 </head>
 <body>
 
-<div class="topbar">Arduino Project Playground</div>
+<div class="topbar">Arduino Interactive Course – Full Playground</div>
 
 <div class="workspace">
 
   <!-- Board Area -->
-  <div class="board-area">
+  <div class="board-area" id="board-area">
+    <svg id="wires-svg"></svg>
     <div class="arduino">
       Arduino UNO
       <div id="pins"></div>
@@ -120,108 +47,239 @@ button {
 
   <!-- Control Panel -->
   <div class="control-panel">
-    <h3>Add Component</h3>
+    <h3>Component Library</h3>
     <button onclick="addLED()">Add LED</button>
+    <button onclick="addRGBLED()">Add RGB LED</button>
     <button onclick="addButton()">Add Button</button>
     <button onclick="addSensor()">Add Sensor</button>
+    <button onclick="addSlider()">Add Slider</button>
+    <button onclick="addResistor()">Add Resistor</button>
+    <button onclick="addBuzzer()">Add Buzzer</button>
+    <button onclick="addMotor()">Add Motor</button>
 
     <h3>Arduino Code</h3>
     <textarea id="code">// Example:
-// int value = analogRead(A0);
-// if(value > 500){ digitalWrite(3,HIGH); } else { digitalWrite(3,LOW); }
+// int val = analogRead(A0);
+// if(val > 500){ digitalWrite(D3,HIGH); } else { digitalWrite(D3,LOW); }
 </textarea>
     <button onclick="runCode()">Run Simulation</button>
+
+    <h3>Project Management</h3>
+    <button onclick="saveProject()">Save Project</button>
+    <button onclick="loadProject()">Load Project</button>
+    <button onclick="exportProject()">Export JSON</button>
+    <input type="file" id="importFile" style="margin-top:5px;" onchange="importProject(event)">
+
+    <h3>Lessons</h3>
+    <button onclick="prevLesson()">Previous Lesson</button>
+    <button onclick="nextLesson()">Next Lesson</button>
+    <span id="lesson-label">Lesson 1</span>
   </div>
 
 </div>
 
 <script>
+// --- VARIABLES ---
 const boardPins = [];
-const breadboard = document.getElementById("breadboard");
 const pinsDiv = document.getElementById("pins");
+const breadboard = document.getElementById("breadboard");
 const status = document.getElementById("status");
+const svg = document.getElementById("wires-svg");
+const boardArea = document.getElementById("board-area");
+const components = [];
+const wires = [];
 
-// Create Arduino pins D0-D13 and A0-A5
+// --- CREATE ARDUINO PINS ---
 for(let i=0;i<=13;i++){
-  const pin = document.createElement("div");
-  pin.classList.add("pin");
-  pin.dataset.pin = "D"+i;
-  pin.title = "D"+i;
-  pinsDiv.appendChild(pin);
-  boardPins.push(pin);
+  const pin=document.createElement("div"); pin.classList.add("pin"); pin.dataset.pin="D"+i; pin.textContent="D"+i;
+  pinsDiv.appendChild(pin); boardPins.push(pin);
 }
 for(let i=0;i<=5;i++){
-  const pin = document.createElement("div");
-  pin.classList.add("pin");
-  pin.dataset.pin = "A"+i;
-  pin.title = "A"+i;
-  pinsDiv.appendChild(pin);
-  boardPins.push(pin);
+  const pin=document.createElement("div"); pin.classList.add("pin"); pin.dataset.pin="A"+i; pin.textContent="A"+i;
+  pinsDiv.appendChild(pin); boardPins.push(pin);
 }
+["5V","GND"].forEach(p=>{
+  const pin=document.createElement("div"); pin.classList.add("pin"); pin.dataset.pin=p; pin.textContent=p;
+  pinsDiv.appendChild(pin); boardPins.push(pin);
+});
 
-// Drag wires (basic implementation)
+// --- DRAG WIRE ---
+let currentWire=null;
 boardPins.forEach(pin=>{
+  pin.draggable=true;
   pin.addEventListener("dragstart", e=>{
-    e.dataTransfer.setData("pin", pin.dataset.pin);
+    const rect = pin.getBoundingClientRect();
+    currentWire = {pin:pin.dataset.pin, x0:rect.left+rect.width/2, y0:rect.top+rect.height/2};
   });
 });
 
-// Components storage
-const components = [];
+// --- COMPONENT FUNCTIONS ---
+function addLED(){ addComponent("led"); }
+function addRGBLED(){ addComponent("rgb-led"); }
+function addButton(){ addComponent("button", true); }
+function addSensor(){ addComponent("sensor"); }
+function addSlider(){ addComponent("slider"); }
+function addResistor(){ addComponent("resistor"); }
+function addBuzzer(){ addComponent("buzzer"); }
+function addMotor(){ addComponent("motor"); }
 
-function addLED(){
-  const led = document.createElement("div");
-  led.classList.add("led");
-  led.draggable = true;
-  led.dataset.type = "LED";
-  breadboard.appendChild(led);
-  components.push({type:"LED", element:led, pin:null});
-}
-function addButton(){
-  const btn = document.createElement("button");
-  btn.innerText="Button";
-  btn.classList.add("button");
-  btn.draggable = true;
-  btn.dataset.type="Button";
-  breadboard.appendChild(btn);
-  components.push({type:"Button", element:btn, pin:null});
-}
-function addSensor(){
-  const sld = document.createElement("input");
-  sld.type="range";
-  sld.min="0"; sld.max="1023"; sld.value="0";
-  sld.classList.add("sensor");
-  breadboard.appendChild(sld);
-  components.push({type:"Sensor", element:sld, pin:null});
+function addComponent(type, toggle=false){
+  const el=document.createElement("div"); el.classList.add(type); el.dataset.type=type;
+  if(toggle){
+    el.dataset.state=false; el.textContent="Button"; 
+    el.onclick=()=>{ el.dataset.state = el.dataset.state==="true"?"false":"true"; el.textContent = el.dataset.state==="true"?"Pressed":"Button"; updateWires(); };
+  }
+  breadboard.appendChild(el);
+  components.push({type, element:el, pin:null});
 }
 
-// Dropping wires to components
+// --- DROP WIRES ---
 breadboard.addEventListener("dragover", e=>e.preventDefault());
 breadboard.addEventListener("drop", e=>{
   e.preventDefault();
-  const pin = e.dataTransfer.getData("pin");
-  const target = e.target;
-  const comp = components.find(c=>c.element===target);
-  if(comp){
-    comp.pin = pin;
-    status.textContent=`Connected ${pin} → ${comp.type}`;
+  const target = e.target.closest(".led,.rgb-led,.button,.sensor,.slider,.resistor,.buzzer,.motor");
+  if(target && currentWire){
+    const comp = components.find(c=>c.element===target);
+    if(comp){
+      comp.pin=currentWire.pin;
+      addWireVisual(currentWire, target);
+      status.textContent=`Connected ${currentWire.pin} → ${comp.type}`;
+    }
   }
+  currentWire=null;
 });
 
-// Run Arduino-style code
+// --- ADD SVG WIRE ---
+function addWireVisual(wire, target){
+  const path = document.createElementNS("http://www.w3.org/2000/svg","path");
+  const rect = target.getBoundingClientRect(), parentRect=boardArea.getBoundingClientRect();
+  const x1=wire.x0, y1=wire.y0;
+  const x2=rect.left-parentRect.left+rect.width/2;
+  const y2=rect.top-parentRect.top+rect.height/2;
+  const dx=(x2-x1)/2, dy=(y2-y1)/2;
+  path.setAttribute("d",`M${x1},${y1} C${x1+dx},${y1} ${x2-dx},${y2} ${x2},${y2}`);
+  // wire color
+  if(wire.pin=="5V") path.setAttribute("stroke","red");
+  else if(wire.pin=="GND") path.setAttribute("stroke","black");
+  else if(wire.pin.startsWith("D")) path.setAttribute("stroke","green");
+  else path.setAttribute("stroke","blue");
+  svg.appendChild(path);
+  wires.push({line:path, comp});
+}
+
+// --- RUN CODE ---
 function runCode(){
-  const code = document.getElementById("code").value;
+  const code=document.getElementById("code").value;
   components.forEach(c=>{
-    if(c.type==="LED"){
-      if(c.pin){
-        const regex = new RegExp(`digitalWrite\\(${c.pin},\\s*HIGH\\)`);
-        if(regex.test(code)) c.element.classList.add("on");
-        else c.element.classList.remove("on");
+    if(c.pin){
+      if(c.type==="led" || c.type==="rgb-led"){
+        const regex=new RegExp(`digitalWrite\\(${c.pin},\\s*HIGH\\)`);
+        if(regex.test(code)) c.element.classList.add("on"); else c.element.classList.remove("on");
+      }
+      if(c.type==="button"){
+        const regex=new RegExp(`digitalRead\\(${c.pin}\\)`);
+        c.stateValue=regex.test(code)?c.element.dataset.state==="true"?1:0:null;
+      }
+      if(c.type==="sensor" || c.type==="slider"){
+        const regex=new RegExp(`analogRead\\(${c.pin}\\)`);
+        c.value=regex.test(code)?parseInt(c.element.value):null;
       }
     }
   });
-  status.textContent="Code executed";
+  status.textContent="Simulation executed";
 }
+
+// --- UPDATE WIRES ---
+function updateWires(){
+  wires.forEach(w=>{
+    const compRect=w.comp.element.getBoundingClientRect(), parentRect=boardArea.getBoundingClientRect();
+    const path=`M${w.line.getAttribute("d").split(" ")[0].substring(1)},${w.line.getAttribute("d").split(" ")[1]} C${(w.line.getAttribute("d").split(" ")[2])} ${compRect.left-parentRect.left+compRect.width/2},${compRect.top-parentRect.top+compRect.height/2}`;
+    w.line.setAttribute("d",path);
+  });
+}
+
+// --- PROJECT SAVE/LOAD ---
+function saveProject(){
+  const project = {
+    code: document.getElementById("code").value,
+    components: components.map(c=>{
+      return { type:c.type, pin:c.pin, state:c.element.dataset.state || null, value:c.element.value || null };
+    }),
+    wires: wires.map(w=>{ return { compIndex: components.indexOf(w.comp), path: w.line.getAttribute("d") }; })
+  };
+  const lessons = JSON.parse(localStorage.getItem("arduinoCourseLessons"));
+  lessons["lesson"+currentLesson] = project;
+  localStorage.setItem("arduinoCourseLessons", JSON.stringify(lessons));
+  status.textContent=`Lesson ${currentLesson} saved!`;
+}
+
+function loadProject(){
+  const lessons = JSON.parse(localStorage.getItem("arduinoCourseLessons"));
+  const project = lessons["lesson"+currentLesson];
+  if(!project){ status.textContent=`Lesson ${currentLesson} is empty.`; return; }
+  components.forEach(c=>c.element.remove());
+  wires.forEach(w=>w.line.remove());
+  components.length=0; wires.length=0;
+
+  project.components.forEach(p=>{
+    addComponent(p.type);
+    const comp = components[components.length-1];
+    comp.pin = p.pin;
+    if(p.state) comp.element.dataset.state = p.state;
+    if(p.value) comp.element.value = p.value;
+  });
+
+  project.wires.forEach(w=>{
+    const comp = components[w.compIndex];
+    const path = document.createElementNS("http://www.w3.org/2000/svg","path");
+    path.setAttribute("d", w.path);
+    path.setAttribute("stroke","black");
+    svg.appendChild(path);
+    wires.push({line:path, comp});
+  });
+
+  document.getElementById("code").value = project.code;
+  status.textContent=`Lesson ${currentLesson} loaded!`;
+}
+
+// --- EXPORT / IMPORT ---
+function exportProject(){
+  saveProject();
+  const lessons = localStorage.getItem("arduinoCourseLessons");
+  const blob = new Blob([lessons], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "arduino_course.json";
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+  status.textContent="Course exported!";
+}
+function importProject(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    localStorage.setItem("arduinoCourseLessons", e.target.result);
+    loadProject();
+  };
+  reader.readAsText(file);
+}
+
+// --- LESSON SYSTEM ---
+let currentLesson = 1;
+const totalLessons = 10;
+const lessonsKey = "arduinoCourseLessons";
+if(!localStorage.getItem(lessonsKey)){
+  const emptyLessons = {};
+  for(let i=1;i<=totalLessons;i++) emptyLessons["lesson"+i] = null;
+  localStorage.setItem(lessonsKey, JSON.stringify(emptyLessons));
+}
+function nextLesson(){ saveProject(); if(currentLesson<totalLessons) currentLesson++; loadProject(); document.getElementById("lesson-label").textContent = `Lesson ${currentLesson}`; }
+function prevLesson(){ saveProject(); if(currentLesson>1) currentLesson--; loadProject(); document.getElementById("lesson-label").textContent = `Lesson ${currentLesson}`; }
+
+// --- INITIAL LOAD ---
+loadProject();
 </script>
 
 </body>
