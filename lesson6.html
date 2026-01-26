@@ -1,155 +1,221 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Lesson 6 – Sensors + Code</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 6 – Tinkercad Style</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 700px;
-      margin: auto;
-      padding: 16px;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+}
 
-    .board {
-      border: 3px solid #333;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
+.topbar {
+  background: #1e1e1e;
+  color: white;
+  padding: 10px 16px;
+  font-weight: bold;
+}
 
-    .wire {
-      display: inline-block;
-      padding: 10px;
-      margin: 6px;
-      border: 2px solid #000;
-      border-radius: 6px;
-      background: orange;
-      cursor: grab;
-    }
+.workspace {
+  display: flex;
+  flex-wrap: wrap;
+}
 
-    .sensor {
-      margin: 15px 0;
-    }
+.board-area {
+  flex: 1;
+  min-width: 320px;
+  padding: 16px;
+}
 
-    textarea {
-      width: 100%;
-      height: 120px;
-      font-family: monospace;
-    }
+.code-area {
+  flex: 1;
+  min-width: 320px;
+  padding: 16px;
+  background: #fff;
+  border-left: 3px solid #ccc;
+}
 
-    .led {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: gray;
-      border: 2px solid black;
-      margin: 10px auto;
-    }
+.arduino {
+  background: #2c7dc9;
+  color: white;
+  padding: 14px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
 
-    .on {
-      background: red;
-    }
+.breadboard {
+  background: #eee;
+  padding: 14px;
+  border-radius: 12px;
+  border: 2px solid #ccc;
+}
 
-    button {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-    }
-  </style>
+.component {
+  margin: 10px 0;
+}
+
+.led {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #555;
+  margin: auto;
+  border: 2px solid #222;
+}
+
+.led.on {
+  background: red;
+  box-shadow: 0 0 15px red;
+}
+
+.wire {
+  display: inline-block;
+  padding: 8px;
+  background: orange;
+  border-radius: 6px;
+  margin: 6px;
+  cursor: grab;
+}
+
+.sensor {
+  margin-top: 16px;
+}
+
+textarea {
+  width: 100%;
+  height: 160px;
+  font-family: monospace;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  font-size: 16px;
+  background: #2c7dc9;
+  color: white;
+  border: none;
+  border-radius: 6px;
+}
+
+.status {
+  margin-top: 10px;
+  font-weight: bold;
+}
+</style>
 </head>
 
 <body>
 
-<h1>Lesson 6: Sensors + Code</h1>
-
-<p>
-Wire the sensor to <strong>A0</strong>.  
-Turn the LED ON when the sensor value is greater than 500.
-</p>
-
-<div class="board">
-  <h3>Sensor Wire</h3>
-  <div class="wire" draggable="true" data-pin="A0">Wire A0</div>
+<div class="topbar">
+  Arduino Simulator (Tinkercad-Style)
 </div>
 
-<div class="sensor">
-  <label>Sensor Value:</label>
-  <input type="range" id="sensor" min="0" max="1023" value="300">
-  <span id="sensorValue">300</span>
-</div>
+<div class="workspace">
 
-<h3>LED</h3>
-<div class="led" id="led"></div>
+  <!-- LEFT: BOARD -->
+  <div class="board-area">
 
-<h3>Arduino Code</h3>
+    <div class="arduino">
+      Arduino UNO
+      <div class="wire" draggable="true" data-pin="A0">A0 Wire</div>
+    </div>
+
+    <div class="breadboard">
+      <h3>Breadboard</h3>
+
+      <div class="component">
+        LED (D3)
+        <div class="led" id="led"></div>
+      </div>
+
+      <div class="sensor">
+        <label>Sensor (A0):</label><br>
+        <input type="range" id="sensor" min="0" max="1023" value="200">
+        <span id="sensorValue">200</span>
+      </div>
+    </div>
+
+    <div class="status" id="status">
+      No wire connected
+    </div>
+
+  </div>
+
+  <!-- RIGHT: CODE -->
+  <div class="code-area">
+    <h3>Arduino Code</h3>
+
 <textarea id="code">
-// Example:
 int value = analogRead(A0);
+
 if (value > 500) {
-  digitalWrite(D3, HIGH);
+  digitalWrite(3, HIGH);
+} else {
+  digitalWrite(3, LOW);
 }
 </textarea>
 
-<button onclick="runCode()">Run Code</button>
+    <button onclick="run()">Start Simulation</button>
 
-<p id="status">No sensor wired</p>
+    <br><br>
+    <a href="lesson5.html">← Lesson 5</a> |
+    <a href="index.html">Home</a>
+  </div>
 
-<br/>
-<a href="lesson5.html">← Back to Lesson 5</a>
-<a href="index.html">Course Home</a>
+</div>
 
 <script>
-  let wiredSensor = null;
-  const led = document.getElementById("led");
-  const sensor = document.getElementById("sensor");
-  const sensorValue = document.getElementById("sensorValue");
-  const status = document.getElementById("status");
+let wired = false;
+const led = document.getElementById("led");
+const sensor = document.getElementById("sensor");
+const sensorValue = document.getElementById("sensorValue");
+const status = document.getElementById("status");
 
-  sensor.oninput = () => {
-    sensorValue.innerText = sensor.value;
-  };
+sensor.oninput = () => {
+  sensorValue.textContent = sensor.value;
+};
 
-  document.querySelector(".wire").addEventListener("dragstart", e => {
-    e.dataTransfer.setData("pin", "A0");
-  });
+document.querySelector(".wire").addEventListener("dragstart", e => {
+  e.dataTransfer.setData("pin", "A0");
+});
 
-  led.addEventListener("dragover", e => e.preventDefault());
+led.addEventListener("dragover", e => e.preventDefault());
 
-  led.addEventListener("drop", e => {
-    e.preventDefault();
-    wiredSensor = e.dataTransfer.getData("pin");
-    status.innerText = "Sensor wired to " + wiredSensor;
-  });
+led.addEventListener("drop", e => {
+  e.preventDefault();
+  wired = true;
+  status.textContent = "Sensor wired to A0";
+});
 
-  function runCode() {
-    if (wiredSensor !== "A0") {
-      alert("Sensor must be wired to A0");
-      return;
-    }
-
-    const code = document.getElementById("code").value;
-    const sensorVal = parseInt(sensor.value);
-
-    const thresholdMatch = code.match(/value\s*>\s*(\d+)/);
-
-    if (!thresholdMatch) {
-      alert("No condition found (value > ?)");
-      return;
-    }
-
-    const threshold = parseInt(thresholdMatch[1]);
-
-    if (sensorVal > threshold) {
-      led.classList.add("on");
-      status.innerText = "LED ON (sensor = " + sensorVal + ")";
-    } else {
-      led.classList.remove("on");
-      status.innerText = "LED OFF (sensor = " + sensorVal + ")";
-    }
+function run() {
+  if (!wired) {
+    alert("Connect A0 to the LED first!");
+    return;
   }
+
+  const code = document.getElementById("code").value;
+  const val = parseInt(sensor.value);
+
+  const match = code.match(/value\s*>\s*(\d+)/);
+  if (!match) {
+    alert("Missing condition: value > ?");
+    return;
+  }
+
+  const threshold = parseInt(match[1]);
+
+  if (val > threshold) {
+    led.classList.add("on");
+    status.textContent = "LED ON (sensor=" + val + ")";
+  } else {
+    led.classList.remove("on");
+    status.textContent = "LED OFF (sensor=" + val + ")";
+  }
+}
 </script>
 
 </body>
