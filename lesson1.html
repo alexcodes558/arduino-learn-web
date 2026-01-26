@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Lesson 1 – LED</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+  <h1>Lesson 1: LED</h1>
+  <p>An LED turns on when a pin is HIGH.</p>
+
+  <button onclick="toggle()">Toggle LED</button>
+  <div id="led" style="width:30px;height:30px;border-radius:50%;background:gray;margin-top:10px;"></div>
+
+  <script>
+    function toggle() {
+      const led = document.getElementById("led");
+      led.style.background = led.style.background === "red" ? "gray" : "red";
+    }
+  </script>
+
+  <p><a href="index.html">← Back to course</a></p>
+</body>
+</html>
