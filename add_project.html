@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Project - Arduino Onshape Simulator</title>
+<style>
+body { margin:0; font-family:Arial,sans-serif; background:#f0f0f0; }
+.topbar { display:flex; justify-content:space-between; align-items:center; background:#1e1e1e; color:white; padding:12px 16px; font-weight:bold; font-size:20px; }
+.topbar button { background:#2c7dc9; color:white; border:none; border-radius:6px; padding:6px 12px; cursor:pointer; font-size:14px; }
+.topbar button:hover { background:#1b63a3; }
+.main { display:flex; height:calc(100vh - 48px); }
+.viewer { flex:2; position:relative; background:#ddd; overflow:hidden; }
+.overlay { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; }
+.component-panel { flex:1; background:#fff; border-left:3px solid #ccc; padding:16px; overflow:auto; }
+.component { position:absolute; width:50px; height:50px; border-radius:6px; text-align:center; line-height:50px; cursor:grab; font-weight:bold; color:white; }
+.arduino { background:#0059a8; }
+.breadboard { background:#eee; color:#000; }
+.led { background:red; }
+.button { background:#555; }
+.sensor { background:green; }
+.buzzer { background:black; }
+.motor { background:purple; }
+.wire { background:orange; width:4px; height:4px; border-radius:50%; }
+.blank-grid { display:none; width:100%; height:100%; background-size:20px 20px; background-image:
+linear-gradient(to right, #bbb 1px, transparent 1px),
+linear-gradient(to bottom, #bbb 1px, transparent 1px);
+position:relative; }
+svg { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
+textarea { width:100%; height:120px; font-family: monospace; margin-top:10px; }
+button.full { width:100%; padding:10px; margin-top:8px; }
+.status { margin-top:10px; font-weight:bold; }
+.tooltip { position:absolute; background:#222; color:white; font-size:12px; padding:2px 6px; border-radius:4px; pointer-events:none; display:none; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  Add Project - Arduino Onshape
+  <button onclick="goBack()">Back to Playground</button>
+</div>
+
+<div class="main">
+  <div class="viewer" id="viewer">
+    <!-- Onshape 3D Viewer -->
+    <iframe id="onshape-frame" src="https://cad.onshape.com/documents" style="width:100%;height:100%;border:none;"></iframe>
+    
+    <!-- Overlay for interactive components -->
+    <div class="overlay" id="overlay"></div>
+    <div class="blank-grid" id="blank-grid"></div>
+    <svg id="wires-svg"></svg>
+    <div class="tooltip" id="tooltip"></div>
+  </div>
+
+  <div class="component-panel">
+    <h3>Components</h3>
+    <button class="full" onclick="addComponent('arduino')">Arduino UNO</button>
+    <button class="full" onclick="addComponent('breadboard')">Breadboard</button>
+    <button class="full" onclick="addComponent('led')">LED</button>
+    <button class="full" onclick="addComponent('button')">Button</button>
+    <button class="full" onclick="addComponent('sensor')">Sensor</button>
+    <button class="full" onclick="addComponent('buzzer')">Buzzer</button>
+    <button class="full" onclick="addComponent('motor')">Motor</button>
+    <button class="full" onclick="addComponent('wire')">Wire</button>
+
+    <h3>Arduino Code</h3>
+    <textarea id="code">// Example:
+// digitalWrite(D3,HIGH);
+// int val = analogRead(A0);</textarea>
+    <button class="full" onclick="runCode()">Run Simulation</button>
+
+    <h3>Project</h3>
+    <button class="full" onclick="saveProject()">Save Project</button>
+    <button class="full" onclick="loadProject()">Load Project</button>
+    <button class="full" onclick="exportProject()">Export JSON</button>
+    <input type="file" id="importFile" onchange="importProject(event)">
+
+    <h3>Lessons</h3>
+    <button class="full" onclick="prevLesson()">Previous Lesson</button>
+    <button class="full" onclick="nextLesson()">Next Lesson</button>
+    <span id="lesson-label">Lesson 1</span>
+
+    <h3>Mode</h3>
+    <button class="full" id="modeBtn">Switch to Blank Grid Mode</button>
+  </div>
+</div>
+
+<script>
+// --- Navigation ---
+function goBack(){window.location.href='index.html';}
+
+// --- Mode Switch ---
+const overlay=document.getElementById("overlay"), blankGrid=document.getElementById("blank-grid");
+const modeBtn=document.getElementById("modeBtn");
+let currentMode="tinkercad";
+modeBtn.addEventListener("click",()=>{
+  if(currentMode==="tinkercad"){ overlay.style.display="none"; blankGrid.style.display="block"; modeBtn.textContent="Switch to Tinkercad Mode"; currentMode="blank"; }
+  else{ overlay.style.display="block"; blankGrid.style.display="none"; modeBtn.textContent="Switch to Blank Grid Mode"; currentMode="tinkercad"; }
+});
+
+// --- COMPONENTS ---
+let components=[], wires=[], wireStart=null;
+const svg=document.getElementById("wires-svg"), tooltip=document.getElementById("tooltip");
+
+function addComponent(type){
+  if(type==='wire'){ startWirePlacement(); return; }
+  const el=document.createElement("div");
+  el.className="component "+type;
+  el.textContent=type[0].toUpperCase();
+  el.style.left="50px"; el.style.top="50px";
+  overlay.appendChild(el);
+  components.push({type, element:el, pin:null});
+
+  el.onmousedown=function(e){
+    let offsetX=e.offsetX, offsetY=e.offsetY;
+    function move(ev){
+      let x=ev.clientX-overlay.getBoundingClientRect().left-offsetX;
+      let y=ev.clientY-overlay.getBoundingClientRect().top-offsetY;
+      el.style.left=x+"px"; el.style.top=y+"px";
+      updateWires();
+    }
+    function up(){document.removeEventListener("mousemove",move); document.removeEventListener("mouseup",up);}
+    document.addEventListener("mousemove",move); document.addEventListener("mouseup",up);
+  };
+}
+
+// --- WIRES ---
+function startWirePlacement(){ alert("Click one component to start wire, then click target to connect."); }
+function updateWires(){ svg.innerHTML=""; wires.forEach(w=>{
+  const {from,to}=w;
+  const f=from.element.getBoundingClientRect();
+  const t=to.element.getBoundingClientRect();
+  const parent=overlay.getBoundingClientRect();
+  const x1=f.left-parent.left+f.width/2, y1=f.top-parent.top+f.height/2;
+  const x2=t.left-parent.left+t.width/2, y2=t.top-parent.top+t.height/2;
+  const path=document.createElementNS("http://www.w3.org/2000/svg","path");
+  path.setAttribute("d",`M${x1},${y1} C${x1},${y1+50} ${x2},${y2-50} ${x2},${y2}`);
+  path.setAttribute("stroke","green"); path.setAttribute("stroke-width","3"); path.setAttribute("fill","none");
+  svg.appendChild(path);
+});}
+
+// --- Arduino Code Simulation ---
+function runCode(){
+  components.forEach(c=>{ if(c.type==='led'){ c.element.style.backgroundColor='red'; } });
+  alert("Code simulated! (expand later for digitalWrite/analogRead interactions)");
+}
+
+// --- LESSON SYSTEM ---
+let currentLesson=1,totalLessons=10;
+const lessonsKey="arduinoCourseLessons";
+if(!localStorage.getItem(lessonsKey)){ let e={}; for(let i=1;i<=totalLessons;i++) e["lesson"+i]=null; localStorage.setItem(lessonsKey,JSON.stringify(e)); }
+function saveProject(){ const p={components:components.map(c=>({type:c.type,x:c.element.style.left,y:c.element.style.top})), code:document.getElementById("code").value}; let l=JSON.parse(localStorage.getItem(lessonsKey)); l["lesson"+currentLesson]=p; localStorage.setItem(lessonsKey,JSON.stringify(l)); alert(`Lesson ${currentLesson} saved!`); }
+function loadProject(){ let l=JSON.parse(localStorage.getItem(lessonsKey)); let p=l["lesson"+currentLesson]; if(!p){ alert(`Lesson ${currentLesson} empty.`); return; } components.forEach(c=>c.element.remove()); components.length=0; p.components.forEach(c=>{ addComponent(c.type); const comp=components[components.length-1]; comp.element.style.left=c.x; comp.element.style.top=c.y; }); document.getElementById("code").value=p.code; document.getElementById("lesson-label").textContent=`Lesson ${currentLesson}`; }
+function nextLesson(){ saveProject(); if(currentLesson<totalLessons)currentLesson++; loadProject(); }
+function prevLesson(){ saveProject(); if(currentLesson>1)currentLesson--; loadProject(); }
+function exportProject(){ saveProject(); const l=localStorage.getItem(lessonsKey); const b=new Blob([l],{type:"application/json"}); const url=URL.createObjectURL(b); const a=document.createElement("a"); a.href=url; a.download="arduino_project.json"; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); alert("Project exported!"); }
+function importProject(e){ const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=function(ev){ localStorage.setItem(lessonsKey,ev.target.result); loadProject(); }; r.readAsText(f); }
+loadProject();
+</script>
+
+</body>
+</html>
