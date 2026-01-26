@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lesson 4 – Sensors</title>
+</head>
+<body>
+
+<h1>Lesson 4: Sensors</h1>
+
+<p>
+Sensors allow your Arduino to detect things like light, temperature, or distance.
+</p>
+
+<p>Example: A light sensor can turn an LED ON when it’s dark.</p>
+
+<pre>
+int sensorValue = analogRead(A0);
+if (sensorValue < 500) {
+  digitalWrite(LED, HIGH);
+}
+</pre>
+
+<a href="board.html">Try it on the Virtual Board</a>
+
+<br/><br/>
+<a href="lesson3.html">← Back to Lesson 3</a>
+<a href="lesson5.html">Next → Lesson 5</a>
+
+</body>
+</html>
