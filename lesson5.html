@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lesson 5 – Virtual Wiring</title>
+  <style>
+    .board {
+      border: 3px solid #333;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    .pin {
+      display: inline-block;
+      padding: 8px;
+      margin: 5px;
+      border: 1px solid #000;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .connected {
+      background: lightgreen;
+    }
+    .led {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: gray;
+      margin-top: 10px;
+    }
+    .on {
+      background: red;
+    }
+    button {
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 10px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Lesson 5: Virtual Wiring</h1>
+
+<p>
+This is a virtual Arduino board. Connect pins to an LED and press the button to see it light up.
+</p>
+
+<div class="board">
+  <strong>Digital Pins</strong><br/>
+  <div class="pin" onclick="connect('D2')" id="D2">D2</div>
+  <div class="pin" onclick="connect('D3')" id="D3">D3</div>
+  <div class="pin" onclick="connect('D4')" id="D4">D4</div>
+</div>
+
+<h3>LED</h3>
+<div class="led" id="led"></div>
+
+<h3>Button</h3>
+<button onclick="pressButton()">Press Button</button>
+
+<p id="status"></p>
+
+<br/>
+<a href="lesson4.html">← Back to Lesson 4</a>
+<a href="index.html">Back to Course Home</a>
+
+<script>
+  let connectedPin = null;
+
+  function connect(pin) {
+    document.querySelectorAll('.pin').forEach(p => p.classList.remove('connected'));
+    document.getElementById(pin).classList.add('connected');
+    connectedPin = pin;
+    document.getElementById("status").innerText = "LED connected to " + pin;
+  }
+
+  function pressButton() {
+    if (connectedPin) {
+      document.getElementById("led").classList.toggle("on");
+    } else {
+      alert("Connect the LED to a pin first!");
+    }
+  }
+</script>
+
+</body>
+</html>
