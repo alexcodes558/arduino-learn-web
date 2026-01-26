@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Arduino Project Playground</title>
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #1e1e1e;
+  color: white;
+}
+
+/* Layout */
+#topbar {
+  background: #111;
+  padding: 10px 20px;
+  font-size: 18px;
+}
+
+#workspace {
+  display: flex;
+  gap: 40px;
+  padding: 30px;
+  overflow: auto;
+}
+
+/* Arduino UNO */
+#arduino {
+  width: 260px;
+  height: 420px;
+  background: #1b5e8f;
+  border-radius: 14px;
+  position: relative;
+  box-shadow: 0 0 20px black;
+}
+
+#arduino h3 {
+  text-align: center;
+  margin: 10px 0;
+}
+
+.pin-column {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pin {
+  width: 22px;
+  height: 10px;
+  background: #ccc;
+  border-radius: 3px;
+  font-size: 9px;
+  color: black;
+  text-align: center;
+  line-height: 10px;
+}
+
+/* Digital Pins */
+#digital {
+  right: 10px;
+  top: 50px;
+}
+
+/* Analog Pins */
+#analog {
+  left: 10px;
+  bottom: 40px;
+}
+
+/* Breadboard */
+#breadboard {
+  width: 520px;
+  height: 220px;
+  background: #e6e6e6;
+  border-radius: 10px;
+  box-shadow: 0 0 10px black;
+  padding: 10px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.hole {
+  width: 10px;
+  height: 10px;
+  background: #bbb;
+  border-radius: 50%;
+  margin: 2px;
+}
+</style>
+</head>
+<body>
+
+<div id="topbar">Arduino Project Playground</div>
+
+<div id="workspace">
+
+  <!-- Arduino -->
+  <div id="arduino">
+    <h3>Arduino UNO</h3>
+
+    <div class="pin-column" id="digital">
+      <div class="pin">13</div><div class="pin">12</div><div class="pin">11</div>
+      <div class="pin">10</div><div class="pin">9</div><div class="pin">8</div>
+      <div class="pin">7</div><div class="pin">6</div><div class="pin">5</div>
+      <div class="pin">4</div><div class="pin">3</div><div class="pin">2</div>
+      <div class="pin">1</div><div class="pin">0</div>
+    </div>
+
+    <div class="pin-column" id="analog">
+      <div class="pin">A5</div><div class="pin">A4</div>
+      <div class="pin">A3</div><div class="pin">A2</div>
+      <div class="pin">A1</div><div class="pin">A0</div>
+    </div>
+  </div>
+
+  <!-- Breadboard -->
+  <div id="breadboard">
+    <!-- 10 rows -->
+    <div class="row">
+      <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+      <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+      <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+      <div class="hole"></div>
+    </div>
+    <div class="row">
+      <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+      <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+      <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+      <div class="hole"></div>
+    </div>
+    <!-- (more rows coming next stage) -->
+  </div>
+
+</div>
+
+</body>
+</html>
