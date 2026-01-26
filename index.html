@@ -75,19 +75,32 @@
   <li><a href="lesson5.html">Virtual Board</a></li>
   <li><a href="lesson6.html">Lesson 6 – Sensors + Code</a></li>
   <!-- Arduino Interactive Playground Section -->
-<section id="arduino-playground" style="margin:40px 0;">
-  <h2 style="text-align:center; font-family:Arial,sans-serif;">Arduino Interactive Playground</h2>
-  <p style="text-align:center; font-family:Arial,sans-serif;">
-    Explore lessons, drag-and-drop components, run code, and create projects directly in your browser!
+<!-- Arduino Interactive Playground Link (Tinkercad-style) -->
+<section id="arduino-playground-link" style="text-align:center; margin:60px 0;">
+  <h2 style="font-family:Arial,sans-serif; font-size:32px; color:#2c7dc9; margin-bottom:20px;">
+    Arduino Interactive Playground
+  </h2>
+  <p style="font-family:Arial,sans-serif; font-size:18px; color:#555; margin-bottom:30px;">
+    Click below to open the full-size interactive Arduino course with all lessons and components.
   </p>
-
-  <!-- Responsive Embed -->
-  <div style="position:relative; width:100%; padding-top:75%; border:2px solid #ccc; border-radius:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.2);">
-    <iframe 
-      src="project_playground.html" 
-      style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;"
-      title="Arduino Interactive Playground">
-    </iframe>
-  </div>
+  
+  <a href="project_playground.html" target="_blank"
+     style="
+       display:inline-block;
+       padding:24px 60px;
+       font-size:22px;
+       font-weight:bold;
+       background: linear-gradient(145deg, #4aa0e6, #2c7dc9);
+       color:white;
+       text-decoration:none;
+       border-radius:16px;
+       box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+       transition: all 0.3s ease;
+     "
+     onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.4)';"
+     onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 6px 15px rgba(0,0,0,0.3)';">
+    Open Playground
+  </a>
 </section>
+
 </ul>
