@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Lesson 5 – Multi Wire Wiring</title>
+  <title>Lesson 5 – Code + Wiring</title>
 
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 650px;
+      max-width: 700px;
       margin: auto;
       padding: 16px;
     }
@@ -29,12 +29,15 @@
       cursor: grab;
     }
 
-    .pin {
-      background: #eee;
-    }
-
     .wire {
       background: orange;
+    }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      font-family: monospace;
+      font-size: 14px;
     }
 
     .led {
@@ -42,56 +45,49 @@
       height: 40px;
       border-radius: 50%;
       background: gray;
-      margin: 10px auto;
       border: 2px solid #000;
+      margin: 10px auto;
     }
 
     .on {
       background: red;
     }
 
-    .drop {
-      border: 3px dashed green;
-    }
-
     button {
       width: 100%;
       padding: 12px;
       font-size: 16px;
-      margin-top: 15px;
+      margin-top: 10px;
     }
   </style>
 </head>
 
 <body>
 
-<h1>Lesson 5: Multi-Wire Wiring</h1>
+<h1>Lesson 5: Code + Wiring</h1>
 
 <p>
-Only the correct pin (D3) will turn the LED ON.
-Try wiring different pins.
+Wire the LED to <strong>D3</strong>, then write Arduino code to turn it ON.
 </p>
 
 <div class="board">
-  <h3>Arduino Pins</h3>
-  <div class="pin" data-pin="D2">D2</div>
-  <div class="pin" data-pin="D3">D3</div>
-  <div class="pin" data-pin="D4">D4</div>
-</div>
-
-<div>
   <h3>Wires</h3>
   <div class="wire" draggable="true" data-pin="D2">Wire D2</div>
   <div class="wire" draggable="true" data-pin="D3">Wire D3</div>
   <div class="wire" draggable="true" data-pin="D4">Wire D4</div>
 </div>
 
-<div>
-  <h3>LED</h3>
-  <div class="led drop" id="led"></div>
-</div>
+<h3>LED</h3>
+<div class="led" id="led"></div>
 
-<button onclick="pressButton()">Press Button</button>
+<h3>Arduino Code</h3>
+<textarea id="code">
+// Example:
+pinMode(D3, OUTPUT);
+digitalWrite(D3, HIGH);
+</textarea>
+
+<button onclick="runCode()">Run Code</button>
 
 <p id="status">No wire connected</p>
 
@@ -100,7 +96,7 @@ Try wiring different pins.
 <a href="index.html">Course Home</a>
 
 <script>
-  let connectedPin = null;
+  let wiredPin = null;
   const led = document.getElementById("led");
   const status = document.getElementById("status");
 
@@ -110,26 +106,43 @@ Try wiring different pins.
     });
   });
 
-  led.addEventListener("dragover", e => {
-    e.preventDefault();
-    led.classList.add("drop");
-  });
+  led.addEventListener("dragover", e => e.preventDefault());
 
   led.addEventListener("drop", e => {
     e.preventDefault();
-    connectedPin = e.dataTransfer.getData("pin");
-    status.innerText = "Connected to " + connectedPin;
-    led.classList.remove("drop");
+    wiredPin = e.dataTransfer.getData("pin");
+    status.innerText = "LED wired to " + wiredPin;
   });
 
-  function pressButton() {
-    if (connectedPin === "D3") {
-      led.classList.toggle("on");
-      status.innerText = "LED ON via " + connectedPin;
-    } else if (connectedPin) {
-      alert("Wrong pin! Try D3.");
-    } else {
+  function runCode() {
+    const code = document.getElementById("code").value;
+
+    if (!wiredPin) {
       alert("Wire the LED first!");
+      return;
+    }
+
+    const writeMatch = code.match(/digitalWrite\\((D\\d),\\s*(HIGH|LOW)\\)/);
+
+    if (!writeMatch) {
+      alert("No digitalWrite() found");
+      return;
+    }
+
+    const pin = writeMatch[1];
+    const value = writeMatch[2];
+
+    if (pin !== wiredPin) {
+      alert("Code pin does not match wiring!");
+      return;
+    }
+
+    if (value === "HIGH") {
+      led.classList.add("on");
+      status.innerText = "LED ON via " + pin;
+    } else {
+      led.classList.remove("on");
+      status.innerText = "LED OFF via " + pin;
     }
   }
 </script>
