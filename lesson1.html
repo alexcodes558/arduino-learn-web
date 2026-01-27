@@ -2,105 +2,174 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Lesson 1: Blink</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 1 – Blink</title>
+
 <style>
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #121212;
-  color: white;
+  font-family: system-ui, Arial, sans-serif;
+  background: #0f172a;
+  color: #e5e7eb;
 }
 
 header {
-  background: #0b3c5d;
-  padding: 20px;
+  background: #020617;
+  padding: 25px;
   text-align: center;
-  font-size: 26px;
+}
+
+header h1 {
+  margin: 0;
+  color: #38bdf8;
 }
 
 .section {
-  padding: 25px;
   max-width: 900px;
   margin: auto;
+  padding: 25px;
+}
+
+.card {
+  background: #111827;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  color: #38bdf8;
 }
 
 .code {
-  background: #1e1e1e;
+  background: #020617;
   padding: 15px;
-  border-radius: 6px;
+  border-radius: 8px;
   font-family: monospace;
-  color: #4fc3f7;
+  color: #7dd3fc;
 }
 
-.tip {
-  background: #263238;
-  padding: 15px;
-  border-left: 4px solid #4fc3f7;
+/* Diagram */
+.diagram {
+  text-align: center;
+}
+
+svg {
+  width: 100%;
+  max-width: 500px;
+}
+
+.wire {
+  stroke: #64748b;
+  stroke-width: 4;
+}
+
+.power {
+  stroke: #22c55e;
+}
+
+.led-off {
+  fill: #374151;
+}
+
+.led-on {
+  fill: red;
+  filter: drop-shadow(0 0 10px red);
+}
+
+button {
+  padding: 10px 16px;
   margin-top: 15px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 6px;
+  border: none;
 }
 </style>
 </head>
+
 <body>
 
-<header>Lesson 1: Blink (The RIGHT Way)</header>
+<header>
+  <h1>Lesson 1: Blink — How Pins Control Power</h1>
+</header>
 
 <div class="section">
-  <h2>What Are We Doing?</h2>
-  <p>
-    We are turning an LED on and off using an Arduino.
-    But more importantly, we are learning what a <b>pin</b> actually is.
-  </p>
-</div>
 
-<div class="section">
-  <h2>What Is a Pin?</h2>
-  <p>
-    A pin is like a tiny switch controlled by code.
-    When the pin is HIGH, electricity flows.
-    When it is LOW, electricity stops.
-  </p>
-</div>
+  <div class="card">
+    <h2>Concept First</h2>
+    <p>
+      An Arduino pin is not magic.  
+      It simply allows electricity to flow (HIGH) or stops it (LOW).
+    </p>
+  </div>
 
-<div class="section">
-  <h2>The Code</h2>
+  <div class="card diagram">
+    <h2>Interactive Diagram</h2>
+    <p>Click the button to simulate the pin turning HIGH / LOW.</p>
 
-  <div class="code">
+    <svg viewBox="0 0 400 200">
+      <!-- Arduino -->
+      <rect x="20" y="60" width="100" height="80" rx="10" fill="#1f2933"/>
+      <text x="70" y="105" fill="white" text-anchor="middle">Arduino</text>
+
+      <!-- Pin -->
+      <circle id="pin" cx="120" cy="100" r="6" fill="#64748b"/>
+      <text x="120" y="120" fill="#9ca3af" text-anchor="middle">Pin 13</text>
+
+      <!-- Wire -->
+      <line id="wire1" x1="126" y1="100" x2="220" y2="100" class="wire"/>
+
+      <!-- LED -->
+      <circle id="led" cx="250" cy="100" r="12" class="led-off"/>
+
+      <!-- Ground wire -->
+      <line id="wire2" x1="262" y1="100" x2="340" y2="140" class="wire"/>
+      <text x="345" y="150" fill="#9ca3af">GND</text>
+    </svg>
+
+    <button onclick="togglePower()">Toggle Pin HIGH / LOW</button>
+    <p id="stateText"></p>
+  </div>
+
+  <div class="card">
+    <h2>The Code Behind This</h2>
+    <div class="code">
 void setup() {<br>
 &nbsp;&nbsp;pinMode(13, OUTPUT);<br>
 }<br><br>
-
 void loop() {<br>
 &nbsp;&nbsp;digitalWrite(13, HIGH);<br>
 &nbsp;&nbsp;delay(1000);<br>
 &nbsp;&nbsp;digitalWrite(13, LOW);<br>
 &nbsp;&nbsp;delay(1000);<br>
 }
+    </div>
   </div>
 
-  <div class="tip">
-    🔹 Pin 13 is connected to the built-in LED on most Arduino boards.<br>
-    🔹 HIGH = electricity ON<br>
-    🔹 LOW = electricity OFF
-  </div>
 </div>
 
-<div class="section">
-  <h2>Try This</h2>
-  <ul>
-    <li>Change <b>1000</b> to <b>200</b></li>
-    <li>Change the pin number</li>
-    <li>Remove a delay and see what happens</li>
-  </ul>
-</div>
+<script>
+let on = false;
 
-<div class="section">
-  <h2>Common Mistakes</h2>
-  <ul>
-    <li>Forgetting pinMode()</li>
-    <li>Using the wrong pin</li>
-    <li>Thinking delay pauses the Arduino forever</li>
-  </ul>
-</div>
+function togglePower() {
+  const led = document.getElementById("led");
+  const wire = document.getElementById("wire1");
+  const text = document.getElementById("stateText");
+
+  on = !on;
+
+  if (on) {
+    led.setAttribute("class", "led-on");
+    wire.classList.add("power");
+    text.innerText = "Pin 13 is HIGH → Electricity flows → LED ON";
+  } else {
+    led.setAttribute("class", "led-off");
+    wire.classList.remove("power");
+    text.innerText = "Pin 13 is LOW → No electricity → LED OFF";
+  }
+}
+</script>
 
 </body>
 </html>
