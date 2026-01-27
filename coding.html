@@ -162,6 +162,24 @@ delay(1000);
   </div>
 
 </section>
+<script>
+  function answer(correct) {
+    const feedback = document.getElementById("feedback");
+    if (correct) {
+      feedback.textContent = "✅ Correct! You may continue.";
+      feedback.style.color = "green";
+      document.getElementById("continueBtn").style.display = "block";
+    } else {
+      feedback.textContent = "❌ Not quite. Review the lesson and try again.";
+      feedback.style.color = "red";
+    }
+  }
+
+  function unlockNext() {
+    alert("Module 2 unlocked!");
+    // Later we can actually unlock sections visually
+  }
+</script>
 
 </body>
 </html>
