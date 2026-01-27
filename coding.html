@@ -1,293 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Arduino Coding Course – Advanced</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<style>
-body {
-  margin:0;
-  font-family: Arial, sans-serif;
-  background:#0f172a;
-  color:#e5e7eb;
-}
-header {
-  background:#020617;
-  padding:25px;
-  text-align:center;
-}
-header h1 { color:#38bdf8; margin:0; }
-
-.section {
-  max-width:1200px;
-  margin:auto;
-  padding:30px;
-}
-
-.card {
-  background:#111827;
-  border-radius:12px;
-  padding:25px;
-  margin-bottom:30px;
-}
-
-.locked {
-  opacity:0.35;
-  pointer-events:none;
-}
-
-h2 { color:#38bdf8; }
-
-.editor {
-  background:#020617;
-  border-radius:8px;
-  padding:15px;
-  font-family:monospace;
-  color:#7dd3fc;
-  min-height:160px;
-  white-space:pre;
-  outline:none;
-}
-
-button {
-  padding:12px 20px;
-  margin-top:10px;
-  font-size:16px;
-  background:#38bdf8;
-  color:#020617;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:bold;
-}
-
-.serial {
-  background:black;
-  color:#00ff90;
-  padding:15px;
-  font-family:monospace;
-  border-radius:8px;
-  height:150px;
-  overflow-y:auto;
-}
-
-.quiz button {
-  width:100%;
-  margin:10px 0;
-}
-
-.correct { background:#22c55e !important; }
-.wrong { background:#ef4444 !important; }
-
-.badge {
-  text-align:center;
-  font-size:26px;
-  color:#22c55e;
-}
-
-.progress {
-  height:12px;
-  background:#020617;
-  border-radius:6px;
-  overflow:hidden;
-  margin-bottom:30px;
-}
-
-.progress-bar {
-  height:100%;
-  width:0%;
-  background:#38bdf8;
-  transition:0.4s;
-}
-
-.execution {
-  background:#020617;
-  border-radius:8px;
-  padding:15px;
-  font-family:monospace;
-  margin-top:15px;
-}
-
-.highlight { color:#22c55e; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Arduino Coding Course</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f6f8; margin:0; padding:0; }
+    header { background:#111; color:white; padding:30px; text-align:center; }
+    section { max-width:900px; margin:auto; padding:40px; }
+    .module { background:white; padding:25px; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,.15); margin-bottom:30px; }
+    code { background:#eee; padding:10px; display:block; border-radius:6px; white-space:pre; }
+    ul { margin-left:20px; }
+  </style>
 </head>
-
 <body>
 
 <header>
-<h1>Arduino Coding Course</h1>
-<p>Read, understand, write, debug, and think like an Arduino programmer</p>
+  <h1>Arduino Coding Course</h1>
+  <p>Learn Arduino programming from zero to real projects</p>
 </header>
 
-<div class="section">
+<section>
+  <!-- Module 1: Expanded -->
+  <div class="module">
+    <h2>Module 1: How Arduino Code Really Works</h2>
 
-<div class="progress"><div id="bar" class="progress-bar"></div></div>
+    <h3>What Is Arduino Code?</h3>
+    <p>
+      Arduino code is a simplified version of C++ designed to control hardware.
+      Unlike apps or websites, Arduino programs talk directly to a microcontroller — a tiny computer whose only job is to read inputs and control outputs.
+    </p>
 
-<!-- SECTION 1 -->
-<div class="card" id="s1">
-<h2>1. How Arduino Code Executes</h2>
-<p>
-Arduino programs always follow the same structure. The <b>setup()</b> function runs exactly one time when the board powers on.
-The <b>loop()</b> function runs continuously forever. This allows Arduino to constantly react to sensors and inputs.
-</p>
+    <h3>The Arduino Brain (Microcontroller)</h3>
+    <p>
+      When you upload code, it is stored inside the Arduino’s microcontroller.
+      Once powered, the chip runs your code automatically — no keyboard, no screen, no mouse.
+    </p>
 
-<div class="editor">
+    <h3>Program Flow: How Code Runs</h3>
+    <p>
+      Arduino programs follow a strict structure. There are only two required functions:
+    </p>
+
+    <code>
 void setup() {
-  pinMode(13, OUTPUT);
+  // runs once when the board powers on
 }
 
 void loop() {
-  digitalWrite(13, HIGH);
+  // runs forever, over and over
 }
-</div>
+    </code>
 
-<div class="quiz">
-<p>Which function repeats forever?</p>
-<button onclick="unlock('s2', this)">loop()</button>
-<button onclick="wrong(this)">setup()</button>
-</div>
-</div>
+    <h3>setup()</h3>
+    <p>
+      The <strong>setup()</strong> function runs exactly ONE time.
+      This is where you configure pins, start communication, and prepare hardware.
+    </p>
 
-<!-- SECTION 2 -->
-<div id="s2" class="card locked">
-<h2>2. Step‑By‑Step Code Execution</h2>
-<p>Arduino executes code from top to bottom. Click each step to see what happens.</p>
+    <ul>
+      <li>Set pin modes (INPUT / OUTPUT)</li>
+      <li>Start Serial communication</li>
+      <li>Initialize sensors</li>
+    </ul>
 
-<div class="execution" id="exec">
-<span class="highlight">▶ setup()</span><br>
-pinMode(13, OUTPUT);<br><br>
-▶ loop()<br>
+    <h3>loop()</h3>
+    <p>
+      The <strong>loop()</strong> function runs forever.
+      When it reaches the bottom, it instantly starts again from the top.
+      This creates continuous behavior like blinking LEDs or reading sensors.
+    </p>
+
+    <h3>Why Arduino Has No main()</h3>
+    <p>
+      Arduino hides the traditional <code>main()</code> function to make learning easier.
+      Internally, Arduino wraps your code in an infinite loop so beginners can focus on logic instead of system setup.
+    </p>
+
+    <h3>Comments (Very Important)</h3>
+    <p>
+      Comments explain what code does. The Arduino ignores them, but humans need them.
+    </p>
+
+    <code>
+// This is a single-line comment
+
+/*
+  This is a multi-line comment
+*/
+    </code>
+
+    <h3>Common Beginner Mistakes</h3>
+    <ul>
+      <li>Forgetting semicolons</li>
+      <li>Writing code outside functions</li>
+      <li>Using pins without pinMode()</li>
+      <li>Expecting code to run once instead of looping</li>
+    </ul>
+
+    <h3>Knowledge Check</h3>
+    <p><strong>Question:</strong> Which function runs repeatedly?</p>
+    <ul>
+      <li>A) setup()</li>
+      <li>B) loop()</li>
+      <li>C) pinMode()</li>
+    </ul>
+
+    <p><em>Correct answer: B</em></p>
+  </div>
+
+  <!-- Module 2: Variables & Data Types -->
+  <div class="module">
+    <h2>Module 2: Variables & Data Types</h2>
+    <p>Variables store information the Arduino can use. You can create <code>int</code>, <code>float</code>, <code>bool</code>, and <code>char</code> variables to represent numbers, states, and text.</p>
+    <code>
+int ledPin = 13;
+bool isOn = false;
+float voltage = 5.0;
+char letter = 'A';
+    </code>
+  </div>
+
+  <!-- Module 3: Digital Output -->
+  <div class="module">
+    <h2>Module 3: Digital Output</h2>
+    <p>Control LEDs and other components using HIGH and LOW signals.</p>
+    <code>
+pinMode(13, OUTPUT);
 digitalWrite(13, HIGH);
-</div>
+    </code>
+  </div>
 
-<button onclick="step()">Next Step</button>
-</div>
+  <!-- Module 4: Timing & delay() -->
+  <div class="module">
+    <h2>Module 4: Timing & delay()</h2>
+    <p>Control how fast code runs and how long LEDs or components stay on/off.</p>
+    <code>
+digitalWrite(13, HIGH);
+delay(1000);
+digitalWrite(13, LOW);
+delay(1000);
+    </code>
+  </div>
 
-<!-- SECTION 3 -->
-<div id="s3" class="card locked">
-<h2>3. Realistic Arduino Compiler Check</h2>
-<p>This simulates how the Arduino IDE checks for syntax errors before uploading.</p>
-
-<div id="compile" class="editor" contenteditable="true">
-void setup() {
-  pinMode(13, OUTPUT)
-}
-</div>
-
-<button onclick="compileCode()">Compile</button>
-<p id="compileResult"></p>
-</div>
-
-<!-- SECTION 4 -->
-<div id="s4" class="card locked">
-<h2>4. Debugging Logic Errors</h2>
-<p>Not all bugs stop compilation. Some cause incorrect behavior.</p>
-
-<div class="editor">
-if (sensor < 500) {
-  digitalWrite(13, HIGH);
-}
-</div>
-
-<div class="quiz">
-<p>What happens when sensor = 600?</p>
-<button onclick="wrong(this)">LED ON</button>
-<button onclick="unlock('s5', this)">LED OFF</button>
-</div>
-</div>
-
-<!-- SECTION 5 -->
-<div id="s5" class="card locked">
-<h2>5. Functions & Loops (Real Arduino Style)</h2>
-<p>
-Functions allow you to reuse logic. Loops repeat logic efficiently.
-</p>
-
-<div class="editor">
-void blinkLED(int times) {
-  for (int i = 0; i < times; i++) {
-    digitalWrite(13, HIGH);
-    delay(500);
-    digitalWrite(13, LOW);
-    delay(500);
-  }
-}
-</div>
-
-<div class="quiz">
-<p>How many times does the LED blink if blinkLED(3) is called?</p>
-<button onclick="unlock('s6', this)">3</button>
-<button onclick="wrong(this)">Infinite</button>
-</div>
-</div>
-
-<!-- SECTION 6 -->
-<div id="s6" class="card locked">
-<h2>6. Arduino + Simulator Connection</h2>
-<p>
-Everything you learned here directly applies to your Virtual Arduino Board.
-Pins, delays, logic, and debugging work exactly the same.
-</p>
-
-<ul>
-<li>digitalWrite → LED</li>
-<li>analogRead → Sensors</li>
-<li>if statements → Decisions</li>
-<li>loops → Automation</li>
-</ul>
-
-<button onclick="unlock('s7', this)">Finish Course</button>
-</div>
-
-<!-- SECTION 7 -->
-<div id="s7" class="card locked">
-<h2>🎓 Course Complete</h2>
-<div class="badge">🏆 Arduino Coding Certified</div>
-<p>You completed a full Arduino coding curriculum.</p>
-</div>
-
-</div>
-
-<script>
-let steps = 0;
-let total = 7;
-
-function updateBar(){
-  let done = document.querySelectorAll('.card:not(.locked)').length;
-  document.getElementById('bar').style.width = (done/total*100) + '%';
-}
-
-function save(id){ localStorage.setItem(id,'yes'); updateBar(); }
-
-function unlock(id, btn){
-  document.getElementById(id).classList.remove('locked');
-  if(btn) btn.classList.add('correct');
-  save(id);
-}
-
-function wrong(btn){ btn.classList.add('wrong'); }
-
-function step(){
-  steps++;
-  if(steps>=2) unlock('s3');
-}
-
-function compileCode(){
-  let code = document.getElementById('compile').innerText;
-  if(code.includes(';')){
-    document.getElementById('compileResult').innerText='✅ Compiled Successfully';
-    unlock('s4');
-  } else {
-    document.getElementById('compileResult').innerText='❌ Missing semicolon';
-  }
-}
-
-['s2','s3','s4','s5','s6','s7'].forEach(id=>{
-  if(localStorage.getItem(id)) document.getElementById(id).classList.remove('locked');
-});
-updateBar();
-</script>
+</section>
 
 </body>
 </html>
