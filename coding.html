@@ -73,6 +73,19 @@
   if (localStorage.getItem("module1Complete") === "true") {
     document.getElementById("module2Card").classList.remove("locked");
   }
+<script>
+  let completed = 0;
+
+  if (localStorage.getItem("module1Complete") === "true") {
+    completed++;
+    document.getElementById("module2Card").classList.remove("locked");
+  }
+
+  const percent = Math.floor((completed / 5) * 100);
+  const bar = document.getElementById("progressBar");
+
+  bar.style.width = percent + "%";
+  bar.textContent = percent + "% complete";
 </script>
 
 </body>
