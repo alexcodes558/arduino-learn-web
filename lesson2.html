@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lesson 2 – Buttons & Input</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lesson 2 – Buttons & Input (Interactive)</title>
 <style>
 body {
   margin: 0;
@@ -16,69 +16,26 @@ header {
   padding: 25px;
   text-align: center;
 }
-header h1 {
-  margin: 0;
-  color: #38bdf8;
-}
-.section {
-  max-width: 1000px;
-  margin: auto;
-  padding: 25px;
-}
-.card {
-  background: #111827;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
-}
+header h1 { margin: 0; color: #38bdf8; }
+.section { max-width: 1000px; margin: auto; padding: 25px; }
+.card { background: #111827; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
 h2 { color: #38bdf8; }
-.code {
-  background: #020617;
-  padding: 15px;
-  border-radius: 8px;
-  font-family: monospace;
-  color: #7dd3fc;
-}
-.diagram {
-  text-align: center;
-}
-svg { width: 100%; max-width: 500px; }
+.code { background: #020617; padding: 15px; border-radius: 8px; font-family: monospace; color: #7dd3fc; }
+.diagram { text-align: center; }
+svg { width: 100%; max-width: 600px; }
 .wire { stroke: #64748b; stroke-width: 4; }
 .wire.flow { stroke: #22c55e; stroke-width: 6; }
 .led-off { fill: #374151; }
 .led-on { fill: red; filter: drop-shadow(0 0 10px red); }
+.button-off { fill: #64748b; cursor: pointer; }
+.button-on { fill: #22c55e; cursor: pointer; }
 button { padding: 10px 16px; margin-top: 15px; font-size: 16px; cursor: pointer; border-radius: 6px; border: none; }
-.tooltip {
-  display: none;
-  position: absolute;
-  background: #1f2933;
-  color: white;
-  padding: 8px;
-  border-radius: 6px;
-  font-size: 14px;
-}
-.quiz button {
-  margin: 8px 0;
-  padding: 10px;
-  width: 100%;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 6px;
-  border: none;
-}
+.tooltip { display: none; position: absolute; background: #1f2933; color: white; padding: 8px; border-radius: 6px; font-size: 14px; }
+.quiz button { margin: 8px 0; padding: 10px; width: 100%; font-size: 16px; cursor: pointer; border-radius: 6px; border: none; }
 .correct { background: #22c55e; color: black; }
 .wrong { background: #ef4444; color: white; }
 .hidden { display: none; }
-.next {
-  display: inline-block;
-  margin-top: 15px;
-  padding: 12px 18px;
-  background: #38bdf8;
-  color: #020617;
-  text-decoration: none;
-  border-radius: 8px;
-  font-weight: bold;
-}
+.next { display: inline-block; margin-top: 15px; padding: 12px 18px; background: #38bdf8; color: #020617; text-decoration: none; border-radius: 8px; font-weight: bold; }
 </style>
 </head>
 <body>
@@ -89,58 +46,79 @@ button { padding: 10px 16px; margin-top: 15px; font-size: 16px; cursor: pointer;
 
 <div class="section">
 
+  <!-- Concept Section -->
   <div class="card">
-    <h2>Concept</h2>
-    <p>Buttons allow your Arduino to read input. When pressed, the pin goes HIGH; when released, it goes LOW.</p>
+    <h2>Concepts</h2>
+    <ul>
+      <li>Input vs Output</li>
+      <li>Button pressed = pin HIGH, released = pin LOW</li>
+      <li>Pull-up / Pull-down resistors prevent floating pins</li>
+      <li>Button bouncing: multiple HIGH/LOW signals when pressed quickly</li>
+    </ul>
   </div>
 
-  <!-- Interactive Diagram -->
+  <!-- Interactive Breadboard Diagram -->
   <div class="card diagram">
-    <h2>Interactive Breadboard Diagram</h2>
-    <p>Click the button in the diagram to simulate pressing it.</p>
-    <svg viewBox="0 0 500 200">
+    <h2>Interactive Breadboard</h2>
+    <p>Click buttons or drag wires to see LEDs respond. Hover pins to see tooltips.</p>
+
+    <svg viewBox="0 0 600 250">
+
       <!-- Arduino -->
       <rect x="20" y="60" width="100" height="80" rx="10" fill="#1f2933"/>
       <text x="70" y="105" fill="white" text-anchor="middle">Arduino</text>
-      <!-- Pin 2 input -->
-      <circle id="pin2" cx="120" cy="80" r="6" fill="#64748b"/>
-      <text x="120" y="60" fill="#9ca3af" text-anchor="middle">Pin 2</text>
-      <!-- LED output -->
-      <circle id="led" cx="250" cy="100" r="12" class="led-off"/>
-      <line id="wireOut" x1="126" y1="100" x2="220" y2="100" class="wire"/>
-      <!-- Button -->
-      <rect id="button" x="200" y="60" width="40" height="20" rx="4" fill="#64748b"/>
-      <text x="220" y="55" fill="#9ca3af" text-anchor="middle">Button</text>
-      <line id="wireIn" x1="220" y1="80" x2="126" y2="80" class="wire"/>
+
+      <!-- Buttons -->
+      <rect id="btn1" x="200" y="60" width="40" height="20" rx="4" class="button-off"/>
+      <text x="220" y="55" fill="#9ca3af" text-anchor="middle">Button 1</text>
+
+      <rect id="btn2" x="260" y="60" width="40" height="20" rx="4" class="button-off"/>
+      <text x="280" y="55" fill="#9ca3af" text-anchor="middle">Button 2</text>
+
+      <!-- LEDs -->
+      <circle id="led1" cx="200" cy="150" r="12" class="led-off"/>
+      <text x="200" y="170" fill="#9ca3af" text-anchor="middle">LED 1</text>
+
+      <circle id="led2" cx="280" cy="150" r="12" class="led-off"/>
+      <text x="280" y="170" fill="#9ca3af" text-anchor="middle">LED 2</text>
+
+      <!-- Wires (draggable) -->
+      <line id="wire1" x1="220" y1="80" x2="200" y2="138" class="wire"/>
+      <line id="wire2" x1="280" y1="80" x2="280" y2="138" class="wire"/>
     </svg>
-    <button onclick="pressButton()">Press / Release Button</button>
+
+    <button onclick="pressButton(1)">Press / Release Button 1</button>
+    <button onclick="pressButton(2)">Press / Release Button 2</button>
     <p id="stateText"></p>
   </div>
 
+  <!-- Code Section -->
   <div class="card">
-    <h2>The Code</h2>
+    <h2>Code Example</h2>
     <div class="code">
 void setup() {<br>
 &nbsp;&nbsp;pinMode(2, INPUT);<br>
+&nbsp;&nbsp;pinMode(3, INPUT);<br>
+&nbsp;&nbsp;pinMode(12, OUTPUT);<br>
 &nbsp;&nbsp;pinMode(13, OUTPUT);<br>
 }<br><br>
 void loop() {<br>
-&nbsp;&nbsp;if(digitalRead(2) == HIGH) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;digitalWrite(13, HIGH);<br>
-&nbsp;&nbsp;} else {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;digitalWrite(13, LOW);<br>
-&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;if(digitalRead(2)==HIGH) digitalWrite(13,HIGH); else digitalWrite(13,LOW);<br>
+&nbsp;&nbsp;if(digitalRead(3)==HIGH &amp;&amp; digitalRead(2)==HIGH) digitalWrite(12,HIGH); else digitalWrite(12,LOW);<br>
 }
     </div>
   </div>
 
-  <!-- Quiz -->
+  <!-- Quiz Section -->
   <div class="card quiz">
-    <h2>Quick Quiz</h2>
-    <p>When a button pin reads HIGH, what happens?</p>
+    <h2>Quiz</h2>
+    <p>1. What happens when a button pin reads HIGH?</p>
     <button onclick="wrong(this)">Nothing</button>
-    <button onclick="correct(this)">Arduino reads input → LED can turn ON</button>
-    <button onclick="wrong(this)">Arduino resets</button>
+    <button onclick="correct(this)">Arduino reads input → LED may turn ON</button>
+    <button onclick="wrong(this)">Board resets</button>
+    <p>2. Which wire must connect to GND?</p>
+    <button onclick="correct(this)">Wire from LED negative side</button>
+    <button onclick="wrong(this)">Wire from Arduino 5V to LED negative</button>
     <p id="quizResult"></p>
     <a id="nextLesson" class="next hidden" href="lesson3.html">Go to Lesson 3 →</a>
   </div>
@@ -148,53 +126,56 @@ void loop() {<br>
 </div>
 
 <script>
-let pressed = false;
+let btnState = [false,false];
 
-function pressButton() {
-  pressed = !pressed;
-  const led = document.getElementById("led");
-  const wireOut = document.getElementById("wireOut");
-  const wireIn = document.getElementById("wireIn");
+// Button toggle logic
+function pressButton(num){
+  btnState[num-1] = !btnState[num-1];
+  const led1 = document.getElementById("led1");
+  const led2 = document.getElementById("led2");
+  const btnElem = document.getElementById("btn"+num);
   const state = document.getElementById("stateText");
 
-  if(pressed){
-    led.setAttribute("class","led-on");
-    wireOut.classList.add("flow");
-    wireIn.classList.add("flow");
-    state.innerText="Button pressed → Pin 2 HIGH → LED ON";
-  } else {
-    led.setAttribute("class","led-off");
-    wireOut.classList.remove("flow");
-    wireIn.classList.remove("flow");
-    state.innerText="Button released → Pin 2 LOW → LED OFF";
-  }
+  btnElem.setAttribute("class", btnState[num-1] ? "button-on":"button-off");
+
+  // LED 1 lights if either button pressed (OR logic)
+  if(btnState[0] || btnState[1]) led1.setAttribute("class","led-on");
+  else led1.setAttribute("class","led-off");
+
+  // LED 2 lights if both buttons pressed (AND logic)
+  if(btnState[0] && btnState[1]) led2.setAttribute("class","led-on");
+  else led2.setAttribute("class","led-off");
+
+  state.innerText = `Button 1: ${btnState[0]? "Pressed":"Released"}, Button 2: ${btnState[1]? "Pressed":"Released"}`;
 }
 
 // Quiz functions
 function correct(btn){
   btn.classList.add("correct");
-  document.getElementById("quizResult").innerText = "✅ Correct! You understand button input.";
+  document.getElementById("quizResult").innerText = "✅ Correct!";
   document.getElementById("nextLesson").classList.remove("hidden");
 }
 function wrong(btn){
   btn.classList.add("wrong");
-  document.getElementById("quizResult").innerText = "❌ Not correct. Try again after reading the lesson.";
+  document.getElementById("quizResult").innerText = "❌ Not correct. Try again.";
 }
 
-// Pin tooltip
-const pin2 = document.getElementById("pin2");
+// Tooltip example for pin
 const tooltip = document.createElement("div");
 tooltip.classList.add("tooltip");
-tooltip.innerText="Pin 2: Reads button state HIGH or LOW";
+tooltip.innerText="Click a button to simulate HIGH input.";
 document.body.appendChild(tooltip);
 
-pin2.addEventListener("mouseenter",(e)=>{
-  tooltip.style.display="block";
-  tooltip.style.left=e.pageX+10+"px";
-  tooltip.style.top=e.pageY+10+"px";
+const btnElems = [document.getElementById("btn1"),document.getElementById("btn2")];
+btnElems.forEach(btn=>{
+  btn.addEventListener("mouseenter",e=>{
+    tooltip.style.display="block";
+    tooltip.style.left=e.pageX+10+"px";
+    tooltip.style.top=e.pageY+10+"px";
+  });
+  btn.addEventListener("mouseleave",()=>{tooltip.style.display="none";});
 });
-pin2.addEventListener("mouseleave",()=>{tooltip.style.display="none";});
-
 </script>
+
 </body>
 </html>
