@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Module 1 – Arduino Code Basics</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background:#f4f6f8;
+      margin:0;
+      padding:0;
+    }
+
+    header {
+      background:#2c7dc9;
+      color:white;
+      padding:30px;
+      text-align:center;
+    }
+
+    section {
+      max-width:900px;
+      margin:auto;
+      padding:40px;
+    }
+
+    .card {
+      background:white;
+      padding:25px;
+      border-radius:12px;
+      box-shadow:0 6px 15px rgba(0,0,0,.15);
+      margin-bottom:30px;
+    }
+
+    .button {
+      display:inline-block;
+      padding:14px 28px;
+      background:#2c7dc9;
+      color:white;
+      text-decoration:none;
+      border-radius:8px;
+      font-weight:bold;
+      margin-top:10px;
+    }
+
+    code {
+      display:block;
+      background:#eee;
+      padding:15px;
+      border-radius:6px;
+      white-space:pre;
+      margin:15px 0;
+    }
+
+    .hidden {
+      display:none;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Module 1</h1>
+  <p>How Arduino Code Works</p>
+</header>
+
+<section>
+
+  <!-- LESSON CONTENT -->
+  <div class="card">
+    <h2>Lesson Reading</h2>
+
+    <p>
+      Arduino programs are written in a simplified version of C++.
+      Every Arduino sketch follows the same structure.
+    </p>
+
+    <p>
+      There are only <strong>two required functions</strong>:
+    </p>
+
+    <ul>
+      <li><code>setup()</code> – runs once when the board powers on</li>
+      <li><code>loop()</code> – runs forever, over and over</li>
+    </ul>
+
+    <code>
+void setup() {
+  // runs once
+}
+
+void loop() {
+  // runs repeatedly
+}
+    </code>
+
+    <p>
+      The Arduino does not stop running unless power is removed.
+      When <code>loop()</code> finishes, it immediately starts again.
+    </p>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="card">
+    <h2>Module 1 Quiz</h2>
+
+    <p><strong>Question:</strong> Which function runs repeatedly?</p>
+
+    <button class="button" onclick="checkAnswer(false)">setup()</button>
+    <button class="button" onclick="checkAnswer(true)">loop()</button>
+
+    <p id="feedback"></p>
+  </div>
+
+  <!-- UNLOCK SECTION -->
+  <div class="card hidden" id="passedSection">
+    <h2>✅ Module Passed</h2>
+    <p>You may continue or return to the Coding Lessons Home.</p>
+
+    <a class="button" href="module2.html">Continue to Module 2</a>
+    <a class="button" href="coding_course.html">Back to Coding Lessons</a>
+  </div>
+
+</section>
+
+<script>
+  function checkAnswer(correct) {
+    const feedback = document.getElementById("feedback");
+
+    if (correct) {
+      feedback.textContent = "Correct! Module 1 completed.";
+      feedback.style.color = "green";
+
+      localStorage.setItem("module1Complete", "true");
+      document.getElementById("passedSection").classList.remove("hidden");
+    } else {
+      feedback.textContent = "Incorrect. Review the lesson and try again.";
+      feedback.style.color = "red";
+    }
+  }
+</script>
+
+</body>
+</html>
