@@ -1,3 +1,19 @@
+<section id="lesson-intro">
+  <h1>Arduino Coding Course</h1>
+  <h2>Module 1: How Arduino Code Works</h2>
+
+  <p>
+    In this lesson, you’ll learn how Arduino programs run, what
+    <code>setup()</code> and <code>loop()</code> do, and how the board
+    follows your instructions.
+  </p>
+
+  <p>
+    Read carefully. At the end, you must pass a short quiz to unlock
+    the next module.
+  </p>
+</section>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -97,17 +113,19 @@ void loop() {
       <li>Using pins without pinMode()</li>
       <li>Expecting code to run once instead of looping</li>
     </ul>
+<section class="quiz">
+  <h3>Module 1 Quiz</h3>
 
-    <h3>Knowledge Check</h3>
-    <p><strong>Question:</strong> Which function runs repeatedly?</p>
-    <ul>
-      <li>A) setup()</li>
-      <li>B) loop()</li>
-      <li>C) pinMode()</li>
-    </ul>
+  <p>1. Which function runs only once?</p>
+  <button onclick="answer(true)">setup()</button>
+  <button onclick="answer(false)">loop()</button>
 
-    <p><em>Correct answer: B</em></p>
-  </div>
+  <p id="feedback"></p>
+
+  <button id="continueBtn" style="display:none;" onclick="unlockNext()">
+    Continue to Module 2
+  </button>
+</section>
 
   <!-- Module 2: Variables & Data Types -->
   <div class="module">
