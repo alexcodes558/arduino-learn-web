@@ -131,68 +131,75 @@ footer {
 
 <body>
 
-<header>
-  <h1>Arduino Interactive Course</h1>
-  <p>Learn Arduino step by step — no hardware needed.</p>
+<body>
+
+<header style="
+  background: linear-gradient(135deg, #2c7dc9, #4aa0e6);
+  color: white;
+  padding: 50px 20px;
+  text-align: center;
+">
+  <h1 style="font-size: 40px; margin-bottom: 10px;">
+    Arduino Interactive Learning
+  </h1>
+  <p style="font-size: 20px; max-width: 600px; margin: auto;">
+    Learn Arduino the right way — lessons, coding, and interactive practice.
+  </p>
 </header>
 
-<main>
+<main style="max-width: 1000px; margin: auto; padding: 40px 20px;">
 
-  <div class="grid">
+  <!-- COURSE SECTION -->
+  <section style="margin-bottom: 40px;">
+    <h2>📘 Learn Arduino</h2>
+    <p>
+      Step-by-step lessons that teach you how Arduino works, how to code,
+      and how to build projects.
+    </p>
 
-    <!-- Live Demo -->
-    <div class="card">
-      <h2>🔴 Live Demo</h2>
-      <p>This page is LIVE. Click the button to toggle a virtual LED.</p>
-      <button class="demo" onclick="toggleLED()">Toggle LED</button>
-      <div id="led" class="led"></div>
-    </div>
+    <a href="coding_course.html"
+       style="display:inline-block; padding:14px 28px; background:#2c7dc9; color:white; text-decoration:none; border-radius:8px; font-weight:bold;">
+      Start Coding Lessons
+    </a>
+  </section>
 
-    <!-- Lessons -->
-    <div class="card">
-      <h2>📚 Lessons</h2>
-      <ul>
-        <li><a href="lesson1.html">Lesson 1: Blink</a></li>
-        <li><a href="lesson2.html">Lesson 2</a></li>
-        <li><a href="lesson3.html">Lesson 3</a></li>
-        <li><a href="lesson4.html">Lesson 4</a></li>
-        <li><a href="lesson5.html">Lesson 5</a></li>
-        <li><a href="lesson6.html">Lesson 6: Sensors + Code</a></li>
-      </ul>
-    </div>
+  <!-- PLAYGROUND -->
+  <section style="margin-bottom: 40px;">
+    <h2>🧪 Arduino Playground</h2>
+    <p>
+      Experiment with virtual Arduino components and learn by doing.
+    </p>
 
-    <!-- Roadmap -->
-    <div class="card">
-      <h2>🧭 Learning Roadmap</h2>
-      <p>See the full path from beginner to building real Arduino projects.</p>
-      <a class="button" href="roadmap.html">View Roadmap</a>
-    </div>
+    <a href="project_playground.html"
+       style="display:inline-block; padding:14px 28px; background:#2c7dc9; color:white; text-decoration:none; border-radius:8px; font-weight:bold;">
+      Open Playground
+    </a>
+  </section>
 
-    <!-- Playground -->
-    <div class="card">
-      <h2>🛠 Project Playground</h2>
-      <p>
-        Experiment freely with circuits and code in a full-size interactive
-        Arduino environment.
-      </p>
-      <a class="button" href="project_playground.html" target="_blank">
-        Open Playground
-      </a>
-    </div>
-
-  </div>
+  <!-- LESSON LINKS -->
+  <section>
+    <h2>📚 Lessons</h2>
+    <ul>
+      <li><a href="lesson1.html">Lesson 1: Blink</a></li>
+      <li><a href="lesson2.html">Lesson 2: LEDs & Pins</a></li>
+      <li><a href="lesson3.html">Lesson 3: Buttons</a></li>
+      <li><a href="roadmap.html">Learning Roadmap</a></li>
+    </ul>
+  </section>
 
 </main>
 
-<footer>
-  Arduino Interactive Course — built to teach, not confuse.
+<footer style="
+  background:#111;
+  color:#aaa;
+  text-align:center;
+  padding:20px;
+  margin-top:40px;
+">
+  <p>Arduino Interactive Course</p>
 </footer>
 
-<script>
-function toggleLED() {
-  document.getElementById("led").classList.toggle("on");
-}
-</script>
+</body>
 
 </body>
 </html>
