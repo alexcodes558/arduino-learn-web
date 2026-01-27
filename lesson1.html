@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lesson 1 – Blink</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lesson 1 – Blink (Interactive)</title>
 
 <style>
 body {
@@ -12,35 +12,29 @@ body {
   background: #0f172a;
   color: #e5e7eb;
 }
-
 header {
   background: #020617;
   padding: 25px;
   text-align: center;
 }
-
 header h1 {
   margin: 0;
   color: #38bdf8;
 }
-
 .section {
-  max-width: 900px;
+  max-width: 1000px;
   margin: auto;
   padding: 25px;
 }
-
 .card {
   background: #111827;
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 20px;
 }
-
 h2 {
   color: #38bdf8;
 }
-
 .code {
   background: #020617;
   padding: 15px;
@@ -48,35 +42,28 @@ h2 {
   font-family: monospace;
   color: #7dd3fc;
 }
-
-/* Diagram */
 .diagram {
   text-align: center;
 }
-
 svg {
   width: 100%;
   max-width: 500px;
 }
-
 .wire {
   stroke: #64748b;
   stroke-width: 4;
 }
-
-.power {
+.wire.flow {
   stroke: #22c55e;
+  stroke-width: 6;
 }
-
 .led-off {
   fill: #374151;
 }
-
 .led-on {
   fill: red;
   filter: drop-shadow(0 0 10px red);
 }
-
 button {
   padding: 10px 16px;
   margin-top: 15px;
@@ -85,55 +72,95 @@ button {
   border-radius: 6px;
   border: none;
 }
+.tooltip {
+  display: none;
+  position: absolute;
+  background: #1f2933;
+  color: white;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+.quiz button {
+  margin: 8px 0;
+  padding: 10px;
+  width: 100%;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 6px;
+  border: none;
+}
+.correct { background: #22c55e; color: black; }
+.wrong { background: #ef4444; color: white; }
+.hidden { display: none; }
+.next {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 12px 18px;
+  background: #38bdf8;
+  color: #020617;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+}
 </style>
 </head>
-
 <body>
 
 <header>
-  <h1>Lesson 1: Blink — How Pins Control Power</h1>
+  <h1>Lesson 1: Blink — Interactive</h1>
 </header>
 
 <div class="section">
 
   <div class="card">
     <h2>Concept First</h2>
-    <p>
-      An Arduino pin is not magic.  
-      It simply allows electricity to flow (HIGH) or stops it (LOW).
-    </p>
+    <p>An Arduino pin controls electricity. HIGH = ON, LOW = OFF.  
+       You will see this visually below.</p>
   </div>
 
+  <!-- Interactive SVG Diagram -->
   <div class="card diagram">
-    <h2>Interactive Diagram</h2>
-    <p>Click the button to simulate the pin turning HIGH / LOW.</p>
+    <h2>Interactive Breadboard Diagram</h2>
+    <p>Hover pins to see their function. Click pin to toggle HIGH/LOW.</p>
 
-    <svg viewBox="0 0 400 200">
-      <!-- Arduino -->
+    <svg viewBox="0 0 500 200">
+
+      <!-- Arduino rectangle -->
       <rect x="20" y="60" width="100" height="80" rx="10" fill="#1f2933"/>
       <text x="70" y="105" fill="white" text-anchor="middle">Arduino</text>
 
-      <!-- Pin -->
-      <circle id="pin" cx="120" cy="100" r="6" fill="#64748b"/>
+      <!-- Pin 13 -->
+      <circle id="pin13" cx="120" cy="100" r="6" fill="#64748b"/>
       <text x="120" y="120" fill="#9ca3af" text-anchor="middle">Pin 13</text>
 
-      <!-- Wire -->
-      <line id="wire1" x1="126" y1="100" x2="220" y2="100" class="wire"/>
+      <!-- Tooltip -->
+      <foreignObject x="140" y="60" width="200" height="50" id="tooltip">
+        <div xmlns="http://www.w3.org/1999/xhtml" class="tooltip">
+          Pin 13: Controls LED state. HIGH → LED ON, LOW → LED OFF
+        </div>
+      </foreignObject>
 
+      <!-- Wire to LED -->
+      <line id="wire" x1="126" y1="100" x2="220" y2="100" class="wire"/>
       <!-- LED -->
       <circle id="led" cx="250" cy="100" r="12" class="led-off"/>
-
-      <!-- Ground wire -->
-      <line id="wire2" x1="262" y1="100" x2="340" y2="140" class="wire"/>
+      <!-- Wire to GND -->
+      <line x1="262" y1="100" x2="340" y2="140" class="wire"/>
       <text x="345" y="150" fill="#9ca3af">GND</text>
+
+      <!-- Breadboard -->
+      <rect x="200" y="80" width="160" height="40" fill="#111827" stroke="#64748b" stroke-width="2"/>
+      <text x="280" y="75" fill="#9ca3af" text-anchor="middle">Breadboard</text>
+
     </svg>
 
-    <button onclick="togglePower()">Toggle Pin HIGH / LOW</button>
+    <button onclick="togglePin()">Toggle Pin 13 HIGH/LOW</button>
     <p id="stateText"></p>
   </div>
 
   <div class="card">
-    <h2>The Code Behind This</h2>
+    <h2>The Code Behind It</h2>
     <div class="code">
 void setup() {<br>
 &nbsp;&nbsp;pinMode(13, OUTPUT);<br>
@@ -147,28 +174,56 @@ void loop() {<br>
     </div>
   </div>
 
+  <!-- Quiz -->
+  <div class="card quiz">
+    <h2>Quick Quiz</h2>
+    <p>What happens when a pin is set HIGH?</p>
+    <button onclick="wrong(this)">Arduino resets</button>
+    <button onclick="correct(this)">Electricity flows → LED ON</button>
+    <button onclick="wrong(this)">Nothing happens</button>
+    <p id="quizResult"></p>
+    <a id="nextLesson" class="next hidden" href="lesson2.html">Go to Lesson 2 →</a>
+  </div>
+
 </div>
 
 <script>
-let on = false;
+let pinHigh = false;
 
-function togglePower() {
+// Toggle pin and animation
+function togglePin() {
+  pinHigh = !pinHigh;
   const led = document.getElementById("led");
-  const wire = document.getElementById("wire1");
-  const text = document.getElementById("stateText");
+  const wire = document.getElementById("wire");
+  const state = document.getElementById("stateText");
 
-  on = !on;
-
-  if (on) {
-    led.setAttribute("class", "led-on");
-    wire.classList.add("power");
-    text.innerText = "Pin 13 is HIGH → Electricity flows → LED ON";
+  if (pinHigh) {
+    led.setAttribute("class","led-on");
+    wire.classList.add("flow");
+    state.innerText = "Pin 13 HIGH → Electricity flows → LED ON";
   } else {
-    led.setAttribute("class", "led-off");
-    wire.classList.remove("power");
-    text.innerText = "Pin 13 is LOW → No electricity → LED OFF";
+    led.setAttribute("class","led-off");
+    wire.classList.remove("flow");
+    state.innerText = "Pin 13 LOW → No electricity → LED OFF";
   }
 }
+
+// Quiz functions
+function correct(btn){
+  btn.classList.add("correct");
+  document.getElementById("quizResult").innerText = "✅ Correct! You understand HIGH/LOW.";
+  document.getElementById("nextLesson").classList.remove("hidden");
+}
+function wrong(btn){
+  btn.classList.add("wrong");
+  document.getElementById("quizResult").innerText = "❌ Not correct. Read the lesson again and try.";
+}
+
+// Tooltip hover
+const pin = document.getElementById("pin13");
+const tooltip = document.querySelector(".tooltip");
+pin.addEventListener("mouseenter",()=>tooltip.style.display="block");
+pin.addEventListener("mouseleave",()=>tooltip.style.display="none");
 </script>
 
 </body>
