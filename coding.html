@@ -1,250 +1,69 @@
-<section id="lesson-intro">
-  <h1>Arduino Coding Course</h1>
-  <h2>Module 1: How Arduino Code Works</h2>
-
-  <p>
-    In this lesson, you’ll learn how Arduino programs run, what
-    <code>setup()</code> and <code>loop()</code> do, and how the board
-    follows your instructions.
-  </p>
-
-  <p>
-    Read carefully. At the end, you must pass a short quiz to unlock
-    the next module.
-  </p>
-</section>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Arduino Coding Course</title>
+  <title>Arduino Coding Lessons</title>
   <style>
     body { font-family: Arial, sans-serif; background:#f4f6f8; margin:0; padding:0; }
-    header { background:#111; color:white; padding:30px; text-align:center; }
+    header { background:#2c7dc9; color:white; padding:30px; text-align:center; }
     section { max-width:900px; margin:auto; padding:40px; }
-    .module { background:white; padding:25px; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,.15); margin-bottom:30px; }
-    code { background:#eee; padding:10px; display:block; border-radius:6px; white-space:pre; }
-    ul { margin-left:20px; }
+    .card { background:white; padding:25px; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,.15); margin-bottom:30px; }
+    .button { display:inline-block; padding:14px 28px; background:#2c7dc9; color:white; text-decoration:none; border-radius:8px; font-weight:bold; margin-right:10px; }
+    .locked { opacity:0.5; pointer-events:none; }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Arduino Coding Course</h1>
-  <p>Learn Arduino programming from zero to real projects</p>
+  <h1>Arduino Coding Lessons</h1>
+  <p>Read → Answer → Pass → Continue</p>
 </header>
 
 <section>
-  <!-- Module 1: Expanded -->
-  <div class="module">
-    <h2>Module 1: How Arduino Code Really Works</h2>
 
-    <h3>What Is Arduino Code?</h3>
+  <!-- Coding Lessons Home -->
+  <div class="card">
+    <h2>Welcome</h2>
     <p>
-      Arduino code is a simplified version of C++ designed to control hardware.
-      Unlike apps or websites, Arduino programs talk directly to a microcontroller — a tiny computer whose only job is to read inputs and control outputs.
+      This coding course teaches Arduino programming step by step.
+      Each module works like a lesson:
     </p>
-
-    <h3>The Arduino Brain (Microcontroller)</h3>
-    <p>
-      When you upload code, it is stored inside the Arduino’s microcontroller.
-      Once powered, the chip runs your code automatically — no keyboard, no screen, no mouse.
-    </p>
-
-    <h3>Program Flow: How Code Runs</h3>
-    <p>
-      Arduino programs follow a strict structure. There are only two required functions:
-    </p>
-
-    <code>
-void setup() {
-  // runs once when the board powers on
-}
-
-void loop() {
-  // runs forever, over and over
-}
-    </code>
-
-    <h3>setup()</h3>
-    <p>
-      The <strong>setup()</strong> function runs exactly ONE time.
-      This is where you configure pins, start communication, and prepare hardware.
-    </p>
-
     <ul>
-      <li>Set pin modes (INPUT / OUTPUT)</li>
-      <li>Start Serial communication</li>
-      <li>Initialize sensors</li>
+      <li>Read the lesson</li>
+      <li>Answer questions</li>
+      <li>Pass the module</li>
+      <li>Unlock the next one</li>
     </ul>
-
-    <h3>loop()</h3>
-    <p>
-      The <strong>loop()</strong> function runs forever.
-      When it reaches the bottom, it instantly starts again from the top.
-      This creates continuous behavior like blinking LEDs or reading sensors.
-    </p>
-
-    <h3>Why Arduino Has No main()</h3>
-    <p>
-      Arduino hides the traditional <code>main()</code> function to make learning easier.
-      Internally, Arduino wraps your code in an infinite loop so beginners can focus on logic instead of system setup.
-    </p>
-
-    <h3>Comments (Very Important)</h3>
-    <p>
-      Comments explain what code does. The Arduino ignores them, but humans need them.
-    </p>
-
-    <code>
-// This is a single-line comment
-
-/*
-  This is a multi-line comment
-*/
-    </code>
-
-    <h3>Common Beginner Mistakes</h3>
-    <ul>
-      <li>Forgetting semicolons</li>
-      <li>Writing code outside functions</li>
-      <li>Using pins without pinMode()</li>
-      <li>Expecting code to run once instead of looping</li>
-    </ul>
-<section class="quiz">
-  <h3>Module 1 Quiz</h3>
-
-  <p>1. Which function runs only once?</p>
-  <button onclick="answer(true)">setup()</button>
-  <button onclick="answer(false)">loop()</button>
-
-  <p id="feedback"></p>
-
-  <button id="continueBtn" style="display:none;" onclick="unlockNext()">
-    Continue to Module 2
-  </button>
-</section>
-
-  <!-- Module 2: Variables & Data Types -->
-  <div class="module">
-    <h2>Module 2: Variables & Data Types</h2>
-    <p>Variables store information the Arduino can use. You can create <code>int</code>, <code>float</code>, <code>bool</code>, and <code>char</code> variables to represent numbers, states, and text.</p>
-    <code>
-int ledPin = 13;
-bool isOn = false;
-float voltage = 5.0;
-char letter = 'A';
-    </code>
   </div>
 
-  <!-- Module 3: Digital Output -->
-  <div class="module">
-    <h2>Module 3: Digital Output</h2>
-    <p>Control LEDs and other components using HIGH and LOW signals.</p>
-    <code>
-pinMode(13, OUTPUT);
-digitalWrite(13, HIGH);
-    </code>
+  <!-- Module 1 -->
+  <div class="card">
+    <h2>Module 1: How Arduino Code Works</h2>
+    <p>Learn how Arduino programs run using setup() and loop().</p>
+    <a class="button" href="module1.html">Start Module 1</a>
   </div>
 
-  <!-- Module 4: Timing & delay() -->
-  <div class="module">
-    <h2>Module 4: Timing & delay()</h2>
-    <p>Control how fast code runs and how long LEDs or components stay on/off.</p>
-    <code>
-digitalWrite(13, HIGH);
-delay(1000);
-digitalWrite(13, LOW);
-delay(1000);
-    </code>
+  <!-- Module 2 (locked by default) -->
+  <div class="card locked" id="module2Card">
+    <h2>Module 2: Variables & Logic</h2>
+    <p>Learn how Arduino stores and uses information.</p>
+    <a class="button" href="module2.html">Start Module 2</a>
+  </div>
+
+  <!-- Navigation -->
+  <div class="card">
+    <a class="button" href="index.html">⬅ Back to Main Home Page</a>
   </div>
 
 </section>
+
 <script>
-  function answer(correct) {
-    const feedback = document.getElementById("feedback");
-    if (correct) {
-      feedback.textContent = "✅ Correct! You may continue.";
-      feedback.style.color = "green";
-      document.getElementById("continueBtn").style.display = "block";
-    } else {
-      feedback.textContent = "❌ Not quite. Review the lesson and try again.";
-      feedback.style.color = "red";
-    }
-  }
-
-  function unlockNext() {
-    alert("Module 2 unlocked!");
-    // Later we can actually unlock sections visually
+  // Unlock Module 2 if Module 1 is complete
+  if (localStorage.getItem("module1Complete") === "true") {
+    document.getElementById("module2Card").classList.remove("locked");
   }
 </script>
-  <script>
-  // Load saved progress
-  window.onload = function () {
-    if (localStorage.getItem("module1Complete") === "true") {
-      document.getElementById("module2").style.display = "block";
-      document.getElementById("quizFeedback").textContent =
-        "✅ Module 1 already completed.";
-      document.getElementById("quizFeedback").style.color = "green";
-    }
-  };
-
-  function checkAnswer(correct) {
-    const feedback = document.getElementById("quizFeedback");
-
-    if (correct) {
-      feedback.textContent = "✅ Correct! Module 2 unlocked.";
-      feedback.style.color = "green";
-
-      document.getElementById("module2").style.display = "block";
-      localStorage.setItem("module1Complete", "true");
-    } else {
-      feedback.textContent =
-        "❌ Incorrect. Review the lesson and try again.";
-      feedback.style.color = "red";
-    }
-  }
-</script>
-
 
 </body>
-  <section id="module1">
-  <h1>Module 1: How Arduino Code Works</h1>
-
-  <p>
-    Arduino programs are written in C/C++. Every Arduino sketch has
-    two required functions:
-  </p>
-
-  <ul>
-    <li><code>setup()</code> — runs once when the board starts</li>
-    <li><code>loop()</code> — runs repeatedly forever</li>
-  </ul>
-
-  <p>
-    The Arduino reads your code line by line and controls hardware
-    like LEDs, motors, and sensors using pins.
-  </p>
-</section>
-
-<section id="quiz1">
-  <h2>Module 1 Quiz</h2>
-
-  <p>Which function runs only once?</p>
-
-  <button onclick="checkAnswer(true)">setup()</button>
-  <button onclick="checkAnswer(false)">loop()</button>
-
-  <p id="quizFeedback"></p>
-</section>
-
-<section id="module2" style="display:none;">
-  <h1>Module 2: Pins, Voltage, and LEDs</h1>
-  <p>
-    Congratulations — you unlocked Module 2.
-  </p>
-</section>
-
 </html>
