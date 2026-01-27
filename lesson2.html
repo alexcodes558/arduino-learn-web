@@ -1,26 +1,200 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Lesson 2 – LEDs</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 2 – Buttons & Input</title>
+<style>
+body {
+  margin: 0;
+  font-family: system-ui, Arial, sans-serif;
+  background: #0f172a;
+  color: #e5e7eb;
+}
+header {
+  background: #020617;
+  padding: 25px;
+  text-align: center;
+}
+header h1 {
+  margin: 0;
+  color: #38bdf8;
+}
+.section {
+  max-width: 1000px;
+  margin: auto;
+  padding: 25px;
+}
+.card {
+  background: #111827;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+h2 { color: #38bdf8; }
+.code {
+  background: #020617;
+  padding: 15px;
+  border-radius: 8px;
+  font-family: monospace;
+  color: #7dd3fc;
+}
+.diagram {
+  text-align: center;
+}
+svg { width: 100%; max-width: 500px; }
+.wire { stroke: #64748b; stroke-width: 4; }
+.wire.flow { stroke: #22c55e; stroke-width: 6; }
+.led-off { fill: #374151; }
+.led-on { fill: red; filter: drop-shadow(0 0 10px red); }
+button { padding: 10px 16px; margin-top: 15px; font-size: 16px; cursor: pointer; border-radius: 6px; border: none; }
+.tooltip {
+  display: none;
+  position: absolute;
+  background: #1f2933;
+  color: white;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+.quiz button {
+  margin: 8px 0;
+  padding: 10px;
+  width: 100%;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 6px;
+  border: none;
+}
+.correct { background: #22c55e; color: black; }
+.wrong { background: #ef4444; color: white; }
+.hidden { display: none; }
+.next {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 12px 18px;
+  background: #38bdf8;
+  color: #020617;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+}
+</style>
 </head>
 <body>
 
-<h1>Lesson 2: LEDs</h1>
+<header>
+  <h1>Lesson 2: Buttons & Input</h1>
+</header>
 
-<p>LEDs connect to Arduino pins. When a pin is HIGH, the LED turns ON.</p>
+<div class="section">
 
-<pre>
-pinMode(13, OUTPUT);
-digitalWrite(13, HIGH);
-</pre>
+  <div class="card">
+    <h2>Concept</h2>
+    <p>Buttons allow your Arduino to read input. When pressed, the pin goes HIGH; when released, it goes LOW.</p>
+  </div>
 
-<a href="board.html">Try it on the Virtual Board</a>
+  <!-- Interactive Diagram -->
+  <div class="card diagram">
+    <h2>Interactive Breadboard Diagram</h2>
+    <p>Click the button in the diagram to simulate pressing it.</p>
+    <svg viewBox="0 0 500 200">
+      <!-- Arduino -->
+      <rect x="20" y="60" width="100" height="80" rx="10" fill="#1f2933"/>
+      <text x="70" y="105" fill="white" text-anchor="middle">Arduino</text>
+      <!-- Pin 2 input -->
+      <circle id="pin2" cx="120" cy="80" r="6" fill="#64748b"/>
+      <text x="120" y="60" fill="#9ca3af" text-anchor="middle">Pin 2</text>
+      <!-- LED output -->
+      <circle id="led" cx="250" cy="100" r="12" class="led-off"/>
+      <line id="wireOut" x1="126" y1="100" x2="220" y2="100" class="wire"/>
+      <!-- Button -->
+      <rect id="button" x="200" y="60" width="40" height="20" rx="4" fill="#64748b"/>
+      <text x="220" y="55" fill="#9ca3af" text-anchor="middle">Button</text>
+      <line id="wireIn" x1="220" y1="80" x2="126" y2="80" class="wire"/>
+    </svg>
+    <button onclick="pressButton()">Press / Release Button</button>
+    <p id="stateText"></p>
+  </div>
 
-<br/><br/>
-<a href="lesson1.html">← Back to Lesson 1</a>
-<a href="lesson3.html">Next → Lesson 3</a>
+  <div class="card">
+    <h2>The Code</h2>
+    <div class="code">
+void setup() {<br>
+&nbsp;&nbsp;pinMode(2, INPUT);<br>
+&nbsp;&nbsp;pinMode(13, OUTPUT);<br>
+}<br><br>
+void loop() {<br>
+&nbsp;&nbsp;if(digitalRead(2) == HIGH) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;digitalWrite(13, HIGH);<br>
+&nbsp;&nbsp;} else {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;digitalWrite(13, LOW);<br>
+&nbsp;&nbsp;}<br>
+}
+    </div>
+  </div>
 
+  <!-- Quiz -->
+  <div class="card quiz">
+    <h2>Quick Quiz</h2>
+    <p>When a button pin reads HIGH, what happens?</p>
+    <button onclick="wrong(this)">Nothing</button>
+    <button onclick="correct(this)">Arduino reads input → LED can turn ON</button>
+    <button onclick="wrong(this)">Arduino resets</button>
+    <p id="quizResult"></p>
+    <a id="nextLesson" class="next hidden" href="lesson3.html">Go to Lesson 3 →</a>
+  </div>
+
+</div>
+
+<script>
+let pressed = false;
+
+function pressButton() {
+  pressed = !pressed;
+  const led = document.getElementById("led");
+  const wireOut = document.getElementById("wireOut");
+  const wireIn = document.getElementById("wireIn");
+  const state = document.getElementById("stateText");
+
+  if(pressed){
+    led.setAttribute("class","led-on");
+    wireOut.classList.add("flow");
+    wireIn.classList.add("flow");
+    state.innerText="Button pressed → Pin 2 HIGH → LED ON";
+  } else {
+    led.setAttribute("class","led-off");
+    wireOut.classList.remove("flow");
+    wireIn.classList.remove("flow");
+    state.innerText="Button released → Pin 2 LOW → LED OFF";
+  }
+}
+
+// Quiz functions
+function correct(btn){
+  btn.classList.add("correct");
+  document.getElementById("quizResult").innerText = "✅ Correct! You understand button input.";
+  document.getElementById("nextLesson").classList.remove("hidden");
+}
+function wrong(btn){
+  btn.classList.add("wrong");
+  document.getElementById("quizResult").innerText = "❌ Not correct. Try again after reading the lesson.";
+}
+
+// Pin tooltip
+const pin2 = document.getElementById("pin2");
+const tooltip = document.createElement("div");
+tooltip.classList.add("tooltip");
+tooltip.innerText="Pin 2: Reads button state HIGH or LOW";
+document.body.appendChild(tooltip);
+
+pin2.addEventListener("mouseenter",(e)=>{
+  tooltip.style.display="block";
+  tooltip.style.left=e.pageX+10+"px";
+  tooltip.style.top=e.pageY+10+"px";
+});
+pin2.addEventListener("mouseleave",()=>{tooltip.style.display="none";});
+
+</script>
 </body>
 </html>
