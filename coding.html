@@ -180,6 +180,71 @@ delay(1000);
     // Later we can actually unlock sections visually
   }
 </script>
+  <script>
+  // Load saved progress
+  window.onload = function () {
+    if (localStorage.getItem("module1Complete") === "true") {
+      document.getElementById("module2").style.display = "block";
+      document.getElementById("quizFeedback").textContent =
+        "✅ Module 1 already completed.";
+      document.getElementById("quizFeedback").style.color = "green";
+    }
+  };
+
+  function checkAnswer(correct) {
+    const feedback = document.getElementById("quizFeedback");
+
+    if (correct) {
+      feedback.textContent = "✅ Correct! Module 2 unlocked.";
+      feedback.style.color = "green";
+
+      document.getElementById("module2").style.display = "block";
+      localStorage.setItem("module1Complete", "true");
+    } else {
+      feedback.textContent =
+        "❌ Incorrect. Review the lesson and try again.";
+      feedback.style.color = "red";
+    }
+  }
+</script>
+
 
 </body>
+  <section id="module1">
+  <h1>Module 1: How Arduino Code Works</h1>
+
+  <p>
+    Arduino programs are written in C/C++. Every Arduino sketch has
+    two required functions:
+  </p>
+
+  <ul>
+    <li><code>setup()</code> — runs once when the board starts</li>
+    <li><code>loop()</code> — runs repeatedly forever</li>
+  </ul>
+
+  <p>
+    The Arduino reads your code line by line and controls hardware
+    like LEDs, motors, and sensors using pins.
+  </p>
+</section>
+
+<section id="quiz1">
+  <h2>Module 1 Quiz</h2>
+
+  <p>Which function runs only once?</p>
+
+  <button onclick="checkAnswer(true)">setup()</button>
+  <button onclick="checkAnswer(false)">loop()</button>
+
+  <p id="quizFeedback"></p>
+</section>
+
+<section id="module2" style="display:none;">
+  <h1>Module 2: Pins, Voltage, and LEDs</h1>
+  <p>
+    Congratulations — you unlocked Module 2.
+  </p>
+</section>
+
 </html>
