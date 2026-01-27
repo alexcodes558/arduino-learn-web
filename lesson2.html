@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Lesson 2 – Buttons & Input (Extended)</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 2 – Buttons & Input</title>
 <style>
 body { margin:0; font-family: system-ui, Arial, sans-serif; background:#0f172a; color:#e5e7eb; }
 header { background:#020617; padding:25px; text-align:center; }
@@ -11,10 +11,11 @@ header h1 { margin:0; color:#38bdf8; }
 .section { max-width:1000px; margin:auto; padding:25px; }
 .card { background:#111827; border-radius:12px; padding:20px; margin-bottom:20px; }
 h2 { color:#38bdf8; }
-.code { background:#020617; padding:15px; border-radius:8px; font-family:monospace; color:#7dd3fc; }
+p { line-height:1.6; }
+.code { background:#020617; padding:15px; border-radius:8px; font-family:monospace; color:#7dd3fc; overflow-x:auto; }
 .diagram { text-align:center; margin-bottom:20px; }
 svg { width:100%; max-width:600px; border:1px solid #334155; border-radius:8px; background:#1e293b; }
-.wire { stroke:#64748b; stroke-width:4; }
+.wire { stroke:#64748b; stroke-width:4; cursor:pointer; }
 .wire.flow { stroke:#22c55e; stroke-width:6; }
 .led-off { fill:#374151; }
 .led-on { fill:red; filter: drop-shadow(0 0 10px red); }
@@ -32,52 +33,53 @@ button { padding:10px 16px; margin-top:10px; font-size:16px; cursor:pointer; bor
 <body>
 
 <header>
-<h1>Lesson 2: Buttons & Input (Extended)</h1>
+<h1>Lesson 2: Buttons & Input</h1>
 </header>
 
 <div class="section">
 
-<!-- Concepts -->
+<!-- Reading / Learning Section -->
 <div class="card">
-<h2>Concepts</h2>
+<h2>Learning Section</h2>
+<p>In this lesson, we will learn how to use buttons with Arduino and understand how inputs and outputs work. You will learn about:</p>
 <ul>
-<li><b>Input vs Output:</b> Inputs read signals, outputs control components.</li>
-<li><b>HIGH vs LOW:</b> HIGH = voltage present, LOW = 0V.</li>
-<li><b>Pull-up/Pull-down resistors:</b> Prevent floating pins.</li>
-<li><b>Button bouncing:</b> Rapid HIGH/LOW changes when pressing.</li>
-<li>We will practice with multiple buttons and LEDs.</li>
+<li><b>Input vs Output:</b> Inputs read signals from sensors or buttons. Outputs control LEDs, motors, and other devices.</li>
+<li><b>HIGH vs LOW:</b> HIGH means the pin is receiving voltage, LOW means 0 volts.</li>
+<li><b>Pull-up / Pull-down resistors:</b> These resistors prevent pins from "floating," which can cause random readings.</li>
+<li><b>Button bouncing:</b> Pressing a button can cause the pin to rapidly switch HIGH/LOW before stabilizing.</li>
+<li><b>Logic Basics:</b> OR logic: LED lights if any button is pressed. AND logic: LED lights only if all buttons are pressed.</li>
 </ul>
+<p>Once you understand these concepts, try the interactive simulations below!</p>
 </div>
 
-<!-- Demo 1: Single Button -->
+<!-- Interactive Demo Section -->
 <div class="card diagram">
 <h2>Demo 1: Single Button → LED</h2>
 <p>Click the button to turn the LED on/off. Hover pins to see tooltips.</p>
 <svg viewBox="0 0 600 250">
-
 <!-- Arduino -->
 <rect x="20" y="60" width="100" height="80" rx="10" fill="#1f2933"/>
 <text x="70" y="105" fill="white" text-anchor="middle">Arduino</text>
 
-<!-- Button 1 -->
+<!-- Button -->
 <rect id="btn1" x="200" y="60" width="40" height="20" rx="4" class="button-off"/>
-<text x="220" y="55" fill="#9ca3af" text-anchor="middle">Button 1</text>
+<text x="220" y="55" fill="#9ca3af" text-anchor="middle">Button</text>
 
-<!-- LED 1 -->
+<!-- LED -->
 <circle id="led1" cx="200" cy="150" r="12" class="led-off"/>
-<text x="200" y="170" fill="#9ca3af" text-anchor="middle">LED 1</text>
+<text x="200" y="170" fill="#9ca3af" text-anchor="middle">LED</text>
 
 <!-- Wire -->
 <line id="wire1" x1="220" y1="80" x2="200" y2="138" class="wire"/>
 </svg>
-<button onclick="pressButton(1)">Press / Release Button 1</button>
+<button onclick="pressButton(1)">Press / Release Button</button>
 <p id="stateText1"></p>
 </div>
 
 <!-- Demo 2: Two Buttons OR Logic -->
 <div class="card diagram">
-<h2>Demo 2: Two Buttons → LED 1 (OR Logic)</h2>
-<p>LED 1 lights if either button is pressed.</p>
+<h2>Demo 2: Two Buttons → LED (OR Logic)</h2>
+<p>LED lights if either button is pressed.</p>
 <svg viewBox="0 0 600 250">
 <!-- Arduino -->
 <rect x="20" y="60" width="100" height="80" rx="10" fill="#1f2933"/>
@@ -90,9 +92,9 @@ button { padding:10px 16px; margin-top:10px; font-size:16px; cursor:pointer; bor
 <rect id="btn2b" x="260" y="60" width="40" height="20" rx="4" class="button-off"/>
 <text x="280" y="55" fill="#9ca3af" text-anchor="middle">Button 2</text>
 
-<!-- LED 1 -->
+<!-- LED -->
 <circle id="led2" cx="230" cy="150" r="12" class="led-off"/>
-<text x="230" y="170" fill="#9ca3af" text-anchor="middle">LED 1</text>
+<text x="230" y="170" fill="#9ca3af" text-anchor="middle">LED</text>
 
 <!-- Wires -->
 <line id="wire2a" x1="220" y1="80" x2="220" y2="138" class="wire"/>
@@ -102,54 +104,26 @@ button { padding:10px 16px; margin-top:10px; font-size:16px; cursor:pointer; bor
 <p id="stateText2"></p>
 </div>
 
-<!-- Demo 3: Two Buttons AND Logic -->
-<div class="card diagram">
-<h2>Demo 3: Two Buttons → LED 2 (AND Logic)</h2>
-<p>LED 2 lights only if both buttons are pressed.</p>
-<svg viewBox="0 0 600 250">
-<rect x="20" y="60" width="100" height="80" rx="10" fill="#1f2933"/>
-<text x="70" y="105" fill="white" text-anchor="middle">Arduino</text>
-
-<!-- Buttons -->
-<rect id="btn3a" x="200" y="60" width="40" height="20" rx="4" class="button-off"/>
-<text x="220" y="55" fill="#9ca3af" text-anchor="middle">Button 1</text>
-
-<rect id="btn3b" x="260" y="60" width="40" height="20" rx="4" class="button-off"/>
-<text x="280" y="55" fill="#9ca3af" text-anchor="middle">Button 2</text>
-
-<!-- LED 2 -->
-<circle id="led3" cx="240" cy="150" r="12" class="led-off"/>
-<text x="240" y="170" fill="#9ca3af" text-anchor="middle">LED 2</text>
-
-<!-- Wires -->
-<line id="wire3a" x1="220" y1="80" x2="230" y2="138" class="wire"/>
-<line id="wire3b" x1="280" y1="80" x2="250" y2="138" class="wire"/>
-</svg>
-<button onclick="pressThreeButtons()">Press / Release Buttons</button>
-<p id="stateText3"></p>
-</div>
-
 <!-- Challenge: Drag Wires -->
 <div class="card diagram">
-<h2>Challenge: Drag Wires to Connect Components</h2>
-<p>Drag virtual wires to connect buttons to LEDs. LED only lights if connected correctly.</p>
+<h2>Challenge: Drag & Connect Wires</h2>
+<p>Drag wires to connect buttons to LEDs. LED lights only if wiring is correct. Multiple wires are available below.</p>
 <svg viewBox="0 0 600 250" id="challengeSvg">
-<!-- Arduino -->
 <rect x="20" y="60" width="100" height="80" rx="10" fill="#1f2933"/>
 <text x="70" y="105" fill="white" text-anchor="middle">Arduino</text>
 
-<!-- Button -->
 <rect id="btnC" x="200" y="60" width="40" height="20" rx="4" class="button-off"/>
 <text x="220" y="55" fill="#9ca3af" text-anchor="middle">Button</text>
 
-<!-- LED -->
 <circle id="ledC" cx="300" cy="150" r="12" class="led-off"/>
 <text x="300" y="170" fill="#9ca3af" text-anchor="middle">LED</text>
 
-<!-- Wire placeholder -->
-<line id="wireC" x1="220" y1="80" x2="300" y2="150" class="wire"/>
+<!-- Wires available for drag -->
+<line id="wireC1" x1="220" y1="80" x2="220" y2="150" class="wire"/>
+<line id="wireC2" x1="220" y1="80" x2="300" y2="138" class="wire"/>
+<line id="wireC3" x1="220" y1="80" x2="300" y2="150" class="wire"/>
 </svg>
-<p>Drag wire endpoints (simulation placeholder for now)</p>
+<p>Drag wires to connect Button → LED correctly. LED lights green if correct.</p>
 </div>
 
 <!-- Code Section -->
@@ -173,11 +147,11 @@ void loop() {<br>
 <!-- Quiz -->
 <div class="card quiz">
 <h2>Quiz</h2>
-<p>1. Which logic lights LED 1 when either button is pressed?</p>
+<p>1. Which logic lights LED when either button is pressed?</p>
 <button onclick="wrong(this)">AND</button>
 <button onclick="correct(this)">OR</button>
 
-<p>2. Which logic lights LED 2 only when both buttons are pressed?</p>
+<p>2. Which logic lights LED only if both buttons are pressed?</p>
 <button onclick="correct(this)">AND</button>
 <button onclick="wrong(this)">OR</button>
 
@@ -193,14 +167,14 @@ void loop() {<br>
 
 <script>
 // Demo 1
-let btn1State = false;
+let btn1State=false;
 function pressButton(num){
-  btn1State = !btn1State;
-  const led1 = document.getElementById("led1");
-  const wire1 = document.getElementById("wire1");
-  const state = document.getElementById("stateText1");
-  const btn = document.getElementById("btn1");
-  btn.setAttribute("class", btn1State?"button-on":"button-off");
+  btn1State=!btn1State;
+  const led1=document.getElementById("led1");
+  const wire1=document.getElementById("wire1");
+  const state=document.getElementById("stateText1");
+  const btn=document.getElementById("btn1");
+  btn.setAttribute("class",btn1State?"button-on":"button-off");
   if(btn1State){
     led1.setAttribute("class","led-on");
     wire1.classList.add("flow");
@@ -213,35 +187,19 @@ function pressButton(num){
 }
 
 // Demo 2
-let btn2State = [false,false];
+let btn2State=[false,false];
 function pressTwoButtons(){
   btn2State[0]=!btn2State[0];
   btn2State[1]=!btn2State[1];
-  const led2 = document.getElementById("led2");
-  const state = document.getElementById("stateText2");
-  const btnA = document.getElementById("btn2a");
-  const btnB = document.getElementById("btn2b");
-  btnA.setAttribute("class", btn2State[0]?"button-on":"button-off");
-  btnB.setAttribute("class", btn2State[1]?"button-on":"button-off");
+  const led2=document.getElementById("led2");
+  const state=document.getElementById("stateText2");
+  const btnA=document.getElementById("btn2a");
+  const btnB=document.getElementById("btn2b");
+  btnA.setAttribute("class",btn2State[0]?"button-on":"button-off");
+  btnB.setAttribute("class",btn2State[1]?"button-on":"button-off");
   if(btn2State[0] || btn2State[1]) led2.setAttribute("class","led-on");
   else led2.setAttribute("class","led-off");
-  state.innerText=`Button1: ${btn2State[0]? "Pressed":"Released"}, Button2: ${btn2State[1]? "Pressed":"Released"}`;
-}
-
-// Demo 3
-let btn3State=[false,false];
-function pressThreeButtons(){
-  btn3State[0]=!btn3State[0];
-  btn3State[1]=!btn3State[1];
-  const led3=document.getElementById("led3");
-  const state=document.getElementById("stateText3");
-  const btnA=document.getElementById("btn3a");
-  const btnB=document.getElementById("btn3b");
-  btnA.setAttribute("class",btn3State[0]?"button-on":"button-off");
-  btnB.setAttribute("class",btn3State[1]?"button-on":"button-off");
-  if(btn3State[0] && btn3State[1]) led3.setAttribute("class","led-on");
-  else led3.setAttribute("class","led-off");
-  state.innerText=`Button1: ${btn3State[0]? "Pressed":"Released"}, Button2: ${btn3State[1]? "Pressed":"Released"}`;
+  state.innerText=`Button1: ${btn2State[0]?"Pressed":"Released"}, Button2: ${btn2State[1]?"Pressed":"Released"}`;
 }
 
 // Quiz
@@ -255,14 +213,14 @@ function wrong(btn){
   document.getElementById("quizResult").innerText="❌ Not correct. Try again.";
 }
 
-// Tooltips for buttons
+// Tooltip for buttons
 const tooltip=document.createElement("div");
 tooltip.classList.add("tooltip");
 tooltip.innerText="Click a button to simulate HIGH input.";
 document.body.appendChild(tooltip);
-const buttons=[document.getElementById("btn1"),document.getElementById("btn2a"),document.getElementById("btn2b"),document.getElementById("btn3a"),document.getElementById("btn3b")];
+const buttons=[document.getElementById("btn1"),document.getElementById("btn2a"),document.getElementById("btn2b")];
 buttons.forEach(btn=>{
-  btn.addEventListener("mouseenter",(e)=>{
+  btn.addEventListener("mouseenter",e=>{
     tooltip.style.display="block";
     tooltip.style.left=e.pageX+10+"px";
     tooltip.style.top=e.pageY+10+"px";
@@ -270,5 +228,6 @@ buttons.forEach(btn=>{
   btn.addEventListener("mouseleave",()=>{tooltip.style.display="none";});
 });
 </script>
+
 </body>
 </html>
