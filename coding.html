@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Coding Course Dashboard</title>
+<title>Arduino Coding Course</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -17,6 +17,7 @@ body {
 h1 {
   color: #2c7dc9;
   text-align: center;
+  margin-bottom: 30px;
 }
 
 .lesson-card {
@@ -56,6 +57,10 @@ h1 {
   font-weight: bold;
   color: #2c7dc9;
 }
+
+.draggablePin { cursor: grab; }
+.led { transition: opacity 0.3s; }
+.resistor { cursor: pointer; }
 </style>
 </head>
 
@@ -63,6 +68,7 @@ h1 {
 
 <h1>Arduino Coding Course</h1>
 
+<!-- LESSON CARDS -->
 <div class="lesson-card">
   <h2>Lesson 1 – Digital Output</h2>
   <span class="progress" id="progress1">❌</span>
@@ -98,71 +104,126 @@ h1 {
   <a href="lesson5.html">Open Lesson 5</a>
 </div>
 
+<!-- INTERACTIVE WIRING SIMULATOR -->
+<div class="lesson-card" id="simulator">
+  <h2>Arduino Wiring Simulator – Resistors & LEDs</h2>
+  <p>Drag pins to breadboard holes, connect resistors, then connect LEDs to see them light.</p>
+
+  <div id="board" style="position:relative; width:100%; height:350px; background:#e6f0f8; border-radius:12px; border:2px solid #2c7dc9;">
+    
+    <!-- Arduino SVG -->
+    <svg id="arduino" viewBox="0 0 200 300" style="position:absolute; left:20px; top:30px; width:120px; height:180px;">
+      <rect x="10" y="10" width="180" height="280" rx="20" fill="#1f6fa5" stroke="#000" stroke-width="2"/>
+      <text x="100" y="25" fill="white" font-size="16" text-anchor="middle">Arduino UNO</text>
+      <g id="arduinoPins">
+        <circle cx="40" cy="60" r="8" fill="red" data-pin="13" class="draggablePin"/>
+        <circle cx="70" cy="60" r="8" fill="red" data-pin="12" class="draggablePin"/>
+        <circle cx="100" cy="60" r="8" fill="red" data-pin="11" class="draggablePin"/>
+        <circle cx="130" cy="60" r="8" fill="red" data-pin="10" class="draggablePin"/>
+      </g>
+    </svg>
+
+    <!-- Breadboard SVG -->
+    <svg id="breadboard" viewBox="0 0 400 200" style="position:absolute; right:20px; top:30px; width:250px; height:180px;">
+      <rect x="10" y="10" width="380" height="180" rx="10" fill="#fff" stroke="#ccc" stroke-width="2"/>
+      <text x="200" y="25" font-size="14" text-anchor="middle">Breadboard</text>
+
+      <!-- Holes -->
+      <g id="holes">
+        <circle cx="50" cy="60" r="6" fill="#ccc" data-hole="A1" class="droppableHole"/>
+        <circle cx="100" cy="60" r="6" fill="#ccc" data-hole="A2" class="droppableHole"/>
+        <circle cx="150" cy="60" r="6" fill="#ccc" data-hole="A3" class="droppableHole"/>
+        <circle cx="200" cy="60" r="6" fill="#ccc" data-hole="A4" class="droppableHole"/>
+        <circle cx="250" cy="60" r="6" fill="#ccc" data-hole="A5" class="droppableHole"/>
+      </g>
+
+      <!-- Resistors -->
+      <g id="resistors">
+        <rect x="60" y="100" width="40" height="8" fill="#ff9900" class="resistor" data-connected="false" />
+        <rect x="160" y="100" width="40" height="8" fill="#ff9900" class="resistor" data-connected="false" />
+      </g>
+    </svg>
+
+    <!-- LEDs -->
+    <div id="leds" style="position:absolute; bottom:20px; left:50%; transform:translateX(-50%); display:flex; gap:20px;">
+      <div class="led" data-pin="13" style="width:30px; height:30px; border-radius:50%; background:red; opacity:0.2;"></div>
+      <div class="led" data-pin="12" style="width:30px; height:30px; border-radius:50%; background:red; opacity:0.2;"></div>
+      <div class="led" data-pin="11" style="width:30px; height:30px; border-radius:50%; background:red; opacity:0.2;"></div>
+      <div class="led" data-pin="10" style="width:30px; height:30px; border-radius:50%; background:red; opacity:0.2;"></div>
+    </div>
+
+  </div>
+  <p>Drag a pin onto a resistor, then from resistor to LED hole. LED lights only if resistor is connected.</p>
+</div>
+
 <script>
-// Update progress marks based on quiz completion
+// Progress indicators
 const lessons = [1,2,3,4,5];
 lessons.forEach(num => {
   if(localStorage.getItem(`lesson${num}Passed`) === "true") {
     document.getElementById(`progress${num}`).textContent = "✅";
   }
 });
-</script>
-<div class="lesson-card" id="simulator">
-  <h2>Arduino Wiring Simulator</h2>
-  <p>Drag wires from Arduino pins to a virtual breadboard. LEDs will light up based on your connections.</p>
 
-  <div id="board" style="position:relative; width:100%; height:250px; background:#e6f0f8; border-radius:12px; border:2px solid #2c7dc9;">
-    <!-- Arduino representation -->
-    <div id="arduino" style="position:absolute; left:20px; top:50px; width:120px; height:150px; background:#1f6fa5; border-radius:10px; color:white; text-align:center; padding-top:5px;">
-      Arduino<br>Pins<br>
-      <div id="pins" style="margin-top:10px;">
-        <div data-pin="13" class="pin" style="width:20px;height:20px;background:red;margin:2px auto;border-radius:50%;cursor:pointer;"></div>
-        <div data-pin="12" class="pin" style="width:20px;height:20px;background:red;margin:2px auto;border-radius:50%;cursor:pointer;"></div>
-      </div>
-    </div>
+// Simulator logic
+const pins = document.querySelectorAll('.draggablePin');
+const holes = document.querySelectorAll('.droppableHole');
+const leds = document.querySelectorAll('.led');
+const resistors = document.querySelectorAll('.resistor');
 
-    <!-- Breadboard representation -->
-    <div id="breadboard" style="position:absolute; right:20px; top:50px; width:200px; height:150px; background:#fff; border:2px solid #ccc; border-radius:8px; text-align:center;">
-      Breadboard<br>
-      <div id="holes" style="margin-top:10px;">
-        <div data-hole="A1" class="hole" style="width:20px;height:20px;background:#ccc;margin:4px auto;border-radius:50%;cursor:pointer;"></div>
-        <div data-hole="A2" class="hole" style="width:20px;height:20px;background:#ccc;margin:4px auto;border-radius:50%;cursor:pointer;"></div>
-      </div>
-    </div>
+let draggingPin = null;
+pins.forEach(pin => pin.addEventListener('mousedown', startDrag));
 
-    <!-- LED display -->
-    <div id="led" style="position:absolute; bottom:10px; left:50%; transform:translateX(-50%); width:40px; height:40px; background:red; border-radius:50%; opacity:0.2;"></div>
-  </div>
+function startDrag(e) {
+  draggingPin = e.target;
+  draggingPin.style.cursor = "grabbing";
 
-  <p style="margin-top:10px;">Click a pin then a hole to connect. LED will light if pin 13 is connected.</p>
-</div>
+  const move = (ev) => {
+    draggingPin.setAttribute('cx', ev.offsetX);
+    draggingPin.setAttribute('cy', ev.offsetY);
+  }
 
-<script>
-let selectedPin = null;
-const pins = document.querySelectorAll("#pins .pin");
-const holes = document.querySelectorAll("#holes .hole");
-const led = document.getElementById("led");
+  const stop = (ev) => {
+    // Check if dropped on resistor
+    resistors.forEach(res => {
+      const rx = parseFloat(res.getAttribute('x')) + 20;
+      const ry = parseFloat(res.getAttribute('y')) + 4;
+      const dx = ev.offsetX - rx;
+      const dy = ev.offsetY - ry;
+      if(Math.sqrt(dx*dx + dy*dy) < 20){
+        res.dataset.connected = draggingPin.dataset.pin;
+      }
+    });
 
-pins.forEach(pin => {
-  pin.addEventListener("click", () => {
-    selectedPin = pin.dataset.pin;
-    pin.style.boxShadow = "0 0 8px 3px yellow";
-    pins.forEach(p=>{if(p!==pin)p.style.boxShadow="";});
+    // Check if dropped on hole
+    holes.forEach(hole => {
+      const dx = ev.offsetX - hole.getAttribute('cx');
+      const dy = ev.offsetY - hole.getAttribute('cy');
+      if(Math.sqrt(dx*dx + dy*dy) < 12){
+        const matchingResistor = Array.from(resistors).some(r => r.dataset.connected === draggingPin.dataset.pin);
+        if(matchingResistor){
+          hole.dataset.connectedPin = draggingPin.dataset.pin;
+        }
+      }
+    });
+
+    updateLEDs();
+    window.removeEventListener('mousemove', move);
+    window.removeEventListener('mouseup', stop);
+    draggingPin.style.cursor = "grab";
+    draggingPin = null;
+  }
+
+  window.addEventListener('mousemove', move);
+  window.addEventListener('mouseup', stop);
+}
+
+function updateLEDs(){
+  leds.forEach(led => {
+    const connected = Array.from(holes).some(h => h.dataset.connectedPin == led.dataset.pin);
+    led.style.opacity = connected ? 1 : 0.2;
   });
-});
-
-holes.forEach(hole => {
-  hole.addEventListener("click", () => {
-    if(!selectedPin) return;
-    hole.dataset.connectedPin = selectedPin;
-    selectedPin = null;
-    pins.forEach(p=>p.style.boxShadow="");
-
-    // If pin 13 is connected, light LED
-    const connected = Array.from(holes).some(h=>h.dataset.connectedPin=="13");
-    led.style.opacity = connected ? "1" : "0.2";
-  });
-});
+}
 </script>
 
 </body>
