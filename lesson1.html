@@ -1,229 +1,226 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Lesson 1 – Blink (Interactive)</title>
+  <meta charset="UTF-8">
+  <title>Module 0 – How Arduino Thinks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<style>
-body {
-  margin: 0;
-  font-family: system-ui, Arial, sans-serif;
-  background: #0f172a;
-  color: #e5e7eb;
-}
-header {
-  background: #020617;
-  padding: 25px;
-  text-align: center;
-}
-header h1 {
-  margin: 0;
-  color: #38bdf8;
-}
-.section {
-  max-width: 1000px;
-  margin: auto;
-  padding: 25px;
-}
-.card {
-  background: #111827;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
-}
-h2 {
-  color: #38bdf8;
-}
-.code {
-  background: #020617;
-  padding: 15px;
-  border-radius: 8px;
-  font-family: monospace;
-  color: #7dd3fc;
-}
-.diagram {
-  text-align: center;
-}
-svg {
-  width: 100%;
-  max-width: 500px;
-}
-.wire {
-  stroke: #64748b;
-  stroke-width: 4;
-}
-.wire.flow {
-  stroke: #22c55e;
-  stroke-width: 6;
-}
-.led-off {
-  fill: #374151;
-}
-.led-on {
-  fill: red;
-  filter: drop-shadow(0 0 10px red);
-}
-button {
-  padding: 10px 16px;
-  margin-top: 15px;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 6px;
-  border: none;
-}
-.tooltip {
-  display: none;
-  position: absolute;
-  background: #1f2933;
-  color: white;
-  padding: 8px;
-  border-radius: 6px;
-  font-size: 14px;
-}
-.quiz button {
-  margin: 8px 0;
-  padding: 10px;
-  width: 100%;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 6px;
-  border: none;
-}
-.correct { background: #22c55e; color: black; }
-.wrong { background: #ef4444; color: white; }
-.hidden { display: none; }
-.next {
-  display: inline-block;
-  margin-top: 15px;
-  padding: 12px 18px;
-  background: #38bdf8;
-  color: #020617;
-  text-decoration: none;
-  border-radius: 8px;
-  font-weight: bold;
-}
-</style>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      line-height: 1.7;
+    }
+
+    header {
+      background: linear-gradient(135deg, #2c7dc9, #4aa0e6);
+      color: white;
+      padding: 50px 20px;
+      text-align: center;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 35px;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    code {
+      display: block;
+      background: #eee;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 15px 0;
+      white-space: pre-wrap;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 14px 28px;
+      background: #2c7dc9;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .quiz button {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
+
 <body>
 
 <header>
-  <h1>Lesson 1: Blink — Interactive</h1>
+  <h1>Module 0</h1>
+  <p>How Arduino Thinks</p>
 </header>
 
-<div class="section">
+<main>
 
+  <!-- READING -->
   <div class="card">
-    <h2>Concept First</h2>
-    <p>An Arduino pin controls electricity. HIGH = ON, LOW = OFF.  
-       You will see this visually below.</p>
+    <h2>🧠 How Arduino Is Different From a Computer</h2>
+
+    <p>
+      A computer runs many programs, has an operating system, and waits for you
+      to click things.
+    </p>
+
+    <p>
+      An Arduino is very different.
+    </p>
+
+    <p>
+      An Arduino runs <strong>one program</strong>, and it runs it
+      <strong>over and over forever</strong>.
+    </p>
+
+    <p>
+      There is no desktop. No apps. No stopping unless power is removed.
+    </p>
   </div>
 
-  <!-- Interactive SVG Diagram -->
-  <div class="card diagram">
-    <h2>Interactive Breadboard Diagram</h2>
-    <p>Hover pins to see their function. Click pin to toggle HIGH/LOW.</p>
+  <!-- MENTAL MODEL -->
+  <div class="card">
+    <h2>🔁 The Arduino Mindset</h2>
 
-    <svg viewBox="0 0 500 200">
+    <p>
+      When an Arduino turns on, it immediately starts executing your code.
+    </p>
 
-      <!-- Arduino rectangle -->
-      <rect x="20" y="60" width="100" height="80" rx="10" fill="#1f2933"/>
-      <text x="70" y="105" fill="white" text-anchor="middle">Arduino</text>
+    <p>
+      Think of Arduino like a very focused robot:
+    </p>
 
-      <!-- Pin 13 -->
-      <circle id="pin13" cx="120" cy="100" r="6" fill="#64748b"/>
-      <text x="120" y="120" fill="#9ca3af" text-anchor="middle">Pin 13</text>
+    <ul>
+      <li>It wakes up</li>
+      <li>It follows instructions exactly</li>
+      <li>It never gets tired</li>
+      <li>It never stops asking “What’s next?”</li>
+    </ul>
 
-      <!-- Tooltip -->
-      <foreignObject x="140" y="60" width="200" height="50" id="tooltip">
-        <div xmlns="http://www.w3.org/1999/xhtml" class="tooltip">
-          Pin 13: Controls LED state. HIGH → LED ON, LOW → LED OFF
-        </div>
-      </foreignObject>
-
-      <!-- Wire to LED -->
-      <line id="wire" x1="126" y1="100" x2="220" y2="100" class="wire"/>
-      <!-- LED -->
-      <circle id="led" cx="250" cy="100" r="12" class="led-off"/>
-      <!-- Wire to GND -->
-      <line x1="262" y1="100" x2="340" y2="140" class="wire"/>
-      <text x="345" y="150" fill="#9ca3af">GND</text>
-
-      <!-- Breadboard -->
-      <rect x="200" y="80" width="160" height="40" fill="#111827" stroke="#64748b" stroke-width="2"/>
-      <text x="280" y="75" fill="#9ca3af" text-anchor="middle">Breadboard</text>
-
-    </svg>
-
-    <button onclick="togglePin()">Toggle Pin 13 HIGH/LOW</button>
-    <p id="stateText"></p>
+    <p>
+      This mindset is critical. If you don’t understand this, Arduino code will
+      feel confusing later.
+    </p>
   </div>
 
+  <!-- CODE INTRO -->
   <div class="card">
-    <h2>The Code Behind It</h2>
-    <div class="code">
-void setup() {<br>
-&nbsp;&nbsp;pinMode(13, OUTPUT);<br>
-}<br><br>
-void loop() {<br>
-&nbsp;&nbsp;digitalWrite(13, HIGH);<br>
-&nbsp;&nbsp;delay(1000);<br>
-&nbsp;&nbsp;digitalWrite(13, LOW);<br>
-&nbsp;&nbsp;delay(1000);<br>
+    <h2>📜 The Shape of Every Arduino Program</h2>
+
+    <p>
+      Every Arduino sketch has the same structure.
+    </p>
+
+    <code>
+void setup() {
+  // runs one time
 }
-    </div>
+
+void loop() {
+  // runs over and over forever
+}
+    </code>
+
+    <p>
+      You do NOT need to understand the code yet.
+      Right now, focus on the behavior.
+    </p>
   </div>
 
-  <!-- Quiz -->
+  <!-- WHY IT MATTERS -->
+  <div class="card">
+    <h2>🤔 Why This Matters</h2>
+
+    <p>
+      Many beginners think Arduino code runs from top to bottom once.
+      That assumption causes almost every beginner mistake.
+    </p>
+
+    <p>
+      Arduino code is a <strong>behavior loop</strong>, not a script.
+    </p>
+
+    <p>
+      Once you truly understand this, everything else becomes easier.
+    </p>
+  </div>
+
+  <!-- QUIZ -->
   <div class="card quiz">
-    <h2>Quick Quiz</h2>
-    <p>What happens when a pin is set HIGH?</p>
-    <button onclick="wrong(this)">Arduino resets</button>
-    <button onclick="correct(this)">Electricity flows → LED ON</button>
-    <button onclick="wrong(this)">Nothing happens</button>
-    <p id="quizResult"></p>
-    <a id="nextLesson" class="next hidden" href="lesson2.html">Go to Lesson 2 →</a>
+    <h2>✅ Check Your Understanding</h2>
+
+    <p><strong>Question:</strong> What does an Arduino do after finishing <code>loop()</code>?</p>
+
+    <button class="button" onclick="checkAnswer(false)">
+      Stops and waits
+    </button>
+
+    <button class="button" onclick="checkAnswer(true)">
+      Runs <code>loop()</code> again
+    </button>
+
+    <button class="button" onclick="checkAnswer(false)">
+      Shuts down
+    </button>
+
+    <p id="feedback"></p>
   </div>
 
-</div>
+  <!-- PASSED -->
+  <div class="card hidden" id="passed">
+    <h2>🎉 Module 0 Completed</h2>
+
+    <p>
+      You now understand how Arduino thinks.
+      This mental model will be used in every lesson.
+    </p>
+
+    <a class="button" href="lesson2.html">Continue to Module 1</a>
+    <a class="button" href="coding_course.html">Back to Coding Course</a>
+  </div>
+
+</main>
 
 <script>
-let pinHigh = false;
+  function checkAnswer(correct) {
+    const feedback = document.getElementById("feedback");
 
-// Toggle pin and animation
-function togglePin() {
-  pinHigh = !pinHigh;
-  const led = document.getElementById("led");
-  const wire = document.getElementById("wire");
-  const state = document.getElementById("stateText");
+    if (correct) {
+      feedback.textContent = "Correct! Arduino immediately runs loop() again.";
+      feedback.style.color = "green";
 
-  if (pinHigh) {
-    led.setAttribute("class","led-on");
-    wire.classList.add("flow");
-    state.innerText = "Pin 13 HIGH → Electricity flows → LED ON";
-  } else {
-    led.setAttribute("class","led-off");
-    wire.classList.remove("flow");
-    state.innerText = "Pin 13 LOW → No electricity → LED OFF";
+      localStorage.setItem("module0Complete", "true");
+      document.getElementById("passed").classList.remove("hidden");
+    } else {
+      feedback.textContent = "Not quite. Re-read how Arduino behaves and try again.";
+      feedback.style.color = "red";
+    }
   }
-}
-
-// Quiz functions
-function correct(btn){
-  btn.classList.add("correct");
-  document.getElementById("quizResult").innerText = "✅ Correct! You understand HIGH/LOW.";
-  document.getElementById("nextLesson").classList.remove("hidden");
-}
-function wrong(btn){
-  btn.classList.add("wrong");
-  document.getElementById("quizResult").innerText = "❌ Not correct. Read the lesson again and try.";
-}
-
-// Tooltip hover
-const pin = document.getElementById("pin13");
-const tooltip = document.querySelector(".tooltip");
-pin.addEventListener("mouseenter",()=>tooltip.style.display="block");
-pin.addEventListener("mouseleave",()=>tooltip.style.display="none");
 </script>
 
 </body>
