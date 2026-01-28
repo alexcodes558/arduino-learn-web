@@ -1,93 +1,111 @@
-<p style="color:red; font-size:30px;">TEST — IF YOU SEE THIS, FILE IS CORRECT</p>
-
-<div class="card">
-  <h2>Your Progress</h2>
-  <div style="background:#ddd; border-radius:10px; overflow:hidden;">
-    <div id="progressBar"
-         style="width:0%; background:#2c7dc9; color:white; padding:10px;">
-      0%
-    </div>
-  </div>
-</div>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Arduino Coding Lessons</title>
-  <style>
-    body { font-family: Arial, sans-serif; background:#f4f6f8; margin:0; padding:0; }
-    header { background:#2c7dc9; color:white; padding:30px; text-align:center; }
-    section { max-width:900px; margin:auto; padding:40px; }
-    .card { background:white; padding:25px; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,.15); margin-bottom:30px; }
-    .button { display:inline-block; padding:14px 28px; background:#2c7dc9; color:white; text-decoration:none; border-radius:8px; font-weight:bold; margin-right:10px; }
-    .locked { opacity:0.5; pointer-events:none; }
-  </style>
+<meta charset="UTF-8">
+<title>Coding Course Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+  margin: 0;
+  padding: 20px;
+  line-height: 1.6;
+}
+
+h1 {
+  color: #2c7dc9;
+  text-align: center;
+}
+
+.lesson-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.lesson-card h2 {
+  margin-top: 0;
+  color: #1e5fa3;
+}
+
+.lesson-card p {
+  margin: 10px 0;
+}
+
+.lesson-card a {
+  display: inline-block;
+  text-decoration: none;
+  color: white;
+  background: #2c7dc9;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.lesson-card a:hover {
+  background: #1e5fa3;
+}
+
+.progress {
+  float: right;
+  font-weight: bold;
+  color: #2c7dc9;
+}
+</style>
 </head>
+
 <body>
 
-<header>
-  <h1>Arduino Coding Lessons</h1>
-  <p>Read → Answer → Pass → Continue</p>
-</header>
+<h1>Arduino Coding Course</h1>
 
-<section>
+<div class="lesson-card">
+  <h2>Lesson 1 – Digital Output</h2>
+  <span class="progress" id="progress1">❌</span>
+  <p>Learn to turn LEDs ON and OFF using digital pins.</p>
+  <a href="lesson1.html">Open Lesson 1</a>
+</div>
 
-  <!-- Coding Lessons Home -->
-  <div class="card">
-    <h2>Welcome</h2>
-    <p>
-      This coding course teaches Arduino programming step by step.
-      Each module works like a lesson:
-    </p>
-    <ul>
-      <li>Read the lesson</li>
-      <li>Answer questions</li>
-      <li>Pass the module</li>
-      <li>Unlock the next one</li>
-    </ul>
-  </div>
+<div class="lesson-card">
+  <h2>Lesson 2 – Variables & Pins</h2>
+  <span class="progress" id="progress2">❌</span>
+  <p>Understand variables and how pins work in code.</p>
+  <a href="lesson2.html">Open Lesson 2</a>
+</div>
 
-  <!-- Module 1 -->
-  <div class="card">
-    <h2>Module 1: How Arduino Code Works</h2>
-    <p>Learn how Arduino programs run using setup() and loop().</p>
-    <a class="button" href="module1.html">Start Module 1</a>
-  </div>
+<div class="lesson-card">
+  <h2>Lesson 3 – Digital Input</h2>
+  <span class="progress" id="progress3">❌</span>
+  <p>Learn about buttons and reading digital input.</p>
+  <a href="lesson3.html">Open Lesson 3</a>
+</div>
 
-  <!-- Module 2 (locked by default) -->
-  <div class="card locked" id="module2Card">
-    <h2>Module 2: Variables & Logic</h2>
-    <p>Learn how Arduino stores and uses information.</p>
-    <a class="button" href="module2.html">Start Module 2</a>
-  </div>
+<div class="lesson-card">
+  <h2>Lesson 4 – PWM & LED Brightness</h2>
+  <span class="progress" id="progress4">❌</span>
+  <p>Learn how PWM controls LED brightness and pseudo-analog output.</p>
+  <a href="lesson4.html">Open Lesson 4</a>
+</div>
 
-  <!-- Navigation -->
-  <div class="card">
-    <a class="button" href="index.html">⬅ Back to Main Home Page</a>
-  </div>
-
-</section>
+<div class="lesson-card">
+  <h2>Lesson 5 – Analog Input</h2>
+  <span class="progress" id="progress5">❌</span>
+  <p>Learn how Arduino reads variable voltages from sensors and potentiometers.</p>
+  <a href="lesson5.html">Open Lesson 5</a>
+</div>
 
 <script>
-  // Unlock Module 2 if Module 1 is complete
-  if (localStorage.getItem("module1Complete") === "true") {
-    document.getElementById("module2Card").classList.remove("locked");
+// Update progress marks based on quiz completion
+const lessons = [1,2,3,4,5];
+lessons.forEach(num => {
+  if(localStorage.getItem(`lesson${num}Passed`) === "true") {
+    document.getElementById(`progress${num}`).textContent = "✅";
   }
-<script>
-  let completed = 0;
-
-  if (localStorage.getItem("module1Complete") === "true") {
-    completed++;
-    document.getElementById("module2Card").classList.remove("locked");
-  }
-
-  const percent = Math.floor((completed / 5) * 100);
-  const bar = document.getElementById("progressBar");
-
-  bar.style.width = percent + "%";
-  bar.textContent = percent + "% complete";
+});
 </script>
 
 </body>
