@@ -107,6 +107,63 @@ lessons.forEach(num => {
   }
 });
 </script>
+<div class="lesson-card" id="simulator">
+  <h2>Arduino Wiring Simulator</h2>
+  <p>Drag wires from Arduino pins to a virtual breadboard. LEDs will light up based on your connections.</p>
+
+  <div id="board" style="position:relative; width:100%; height:250px; background:#e6f0f8; border-radius:12px; border:2px solid #2c7dc9;">
+    <!-- Arduino representation -->
+    <div id="arduino" style="position:absolute; left:20px; top:50px; width:120px; height:150px; background:#1f6fa5; border-radius:10px; color:white; text-align:center; padding-top:5px;">
+      Arduino<br>Pins<br>
+      <div id="pins" style="margin-top:10px;">
+        <div data-pin="13" class="pin" style="width:20px;height:20px;background:red;margin:2px auto;border-radius:50%;cursor:pointer;"></div>
+        <div data-pin="12" class="pin" style="width:20px;height:20px;background:red;margin:2px auto;border-radius:50%;cursor:pointer;"></div>
+      </div>
+    </div>
+
+    <!-- Breadboard representation -->
+    <div id="breadboard" style="position:absolute; right:20px; top:50px; width:200px; height:150px; background:#fff; border:2px solid #ccc; border-radius:8px; text-align:center;">
+      Breadboard<br>
+      <div id="holes" style="margin-top:10px;">
+        <div data-hole="A1" class="hole" style="width:20px;height:20px;background:#ccc;margin:4px auto;border-radius:50%;cursor:pointer;"></div>
+        <div data-hole="A2" class="hole" style="width:20px;height:20px;background:#ccc;margin:4px auto;border-radius:50%;cursor:pointer;"></div>
+      </div>
+    </div>
+
+    <!-- LED display -->
+    <div id="led" style="position:absolute; bottom:10px; left:50%; transform:translateX(-50%); width:40px; height:40px; background:red; border-radius:50%; opacity:0.2;"></div>
+  </div>
+
+  <p style="margin-top:10px;">Click a pin then a hole to connect. LED will light if pin 13 is connected.</p>
+</div>
+
+<script>
+let selectedPin = null;
+const pins = document.querySelectorAll("#pins .pin");
+const holes = document.querySelectorAll("#holes .hole");
+const led = document.getElementById("led");
+
+pins.forEach(pin => {
+  pin.addEventListener("click", () => {
+    selectedPin = pin.dataset.pin;
+    pin.style.boxShadow = "0 0 8px 3px yellow";
+    pins.forEach(p=>{if(p!==pin)p.style.boxShadow="";});
+  });
+});
+
+holes.forEach(hole => {
+  hole.addEventListener("click", () => {
+    if(!selectedPin) return;
+    hole.dataset.connectedPin = selectedPin;
+    selectedPin = null;
+    pins.forEach(p=>p.style.boxShadow="");
+
+    // If pin 13 is connected, light LED
+    const connected = Array.from(holes).some(h=>h.dataset.connectedPin=="13");
+    led.style.opacity = connected ? "1" : "0.2";
+  });
+});
+</script>
 
 </body>
 </html>
