@@ -1,153 +1,234 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Lesson 5 – Code + Wiring</title>
+<meta charset="UTF-8">
+<title>Lesson 5 – Analog Input</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 700px;
-      margin: auto;
-      padding: 16px;
-    }
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+  margin: 0;
+  padding: 20px;
+  line-height: 1.7;
+}
 
-    .board {
-      border: 3px solid #333;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
+h1, h2 {
+  color: #2c7dc9;
+}
 
-    .pin, .wire {
-      display: inline-block;
-      padding: 10px;
-      margin: 6px;
-      border: 2px solid #000;
-      border-radius: 6px;
-      cursor: grab;
-    }
+.card {
+  background: white;
+  padding: 22px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
 
-    .wire {
-      background: orange;
-    }
+svg {
+  width: 100%;
+  border-radius: 10px;
+  background: #fdfdfd;
+}
 
-    textarea {
-      width: 100%;
-      height: 120px;
-      font-family: monospace;
-      font-size: 14px;
-    }
+input[type=range] {
+  width: 100%;
+  margin-top: 10px;
+}
 
-    .led {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: gray;
-      border: 2px solid #000;
-      margin: 10px auto;
-    }
+.output-box {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10px;
+}
 
-    .on {
-      background: red;
-    }
+.nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
 
-    button {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      margin-top: 10px;
-    }
-  </style>
+button, a {
+  background: #2c7dc9;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+button:hover, a:hover {
+  background: #1e5fa3;
+}
+
+.hidden {
+  display: none;
+}
+</style>
 </head>
 
 <body>
 
-<h1>Lesson 5: Code + Wiring</h1>
+<h1>Lesson 5: Analog Input</h1>
 
+<div class="card">
+<h2>What Is Analog Input?</h2>
 <p>
-Wire the LED to <strong>D3</strong>, then write Arduino code to turn it ON.
+Unlike digital pins, analog pins do not read ON or OFF.
+They read <strong>variable voltages</strong>.
 </p>
 
-<div class="board">
-  <h3>Wires</h3>
-  <div class="wire" draggable="true" data-pin="D2">Wire D2</div>
-  <div class="wire" draggable="true" data-pin="D3">Wire D3</div>
-  <div class="wire" draggable="true" data-pin="D4">Wire D4</div>
+<p>
+Arduino converts voltage into numbers using an
+<strong>Analog-to-Digital Converter (ADC)</strong>.
+</p>
 </div>
 
-<h3>LED</h3>
-<div class="led" id="led"></div>
+<div class="card">
+<h2>Arduino Analog Pins</h2>
 
-<h3>Arduino Code</h3>
-<textarea id="code">
-// Example:
-pinMode(D3, OUTPUT);
-digitalWrite(D3, HIGH);
-</textarea>
+<svg viewBox="0 0 800 200">
+  <rect x="20" y="40" width="760" height="120" rx="20" fill="#1f6fa5"/>
+  <text x="400" y="110" fill="white" font-size="28" text-anchor="middle">
+    Arduino UNO – Analog Pins
+  </text>
 
-<button onclick="runCode()">Run Code</button>
+  <g fill="#222">
+    <rect x="150" y="160" width="20" height="30"/>
+    <rect x="200" y="160" width="20" height="30"/>
+    <rect x="250" y="160" width="20" height="30"/>
+    <rect x="300" y="160" width="20" height="30"/>
+    <rect x="350" y="160" width="20" height="30"/>
+    <rect x="400" y="160" width="20" height="30"/>
+  </g>
 
-<p id="status">No wire connected</p>
+  <g fill="#000" font-size="14" text-anchor="middle">
+    <text x="160" y="195">A0</text>
+    <text x="210" y="195">A1</text>
+    <text x="260" y="195">A2</text>
+    <text x="310" y="195">A3</text>
+    <text x="360" y="195">A4</text>
+    <text x="410" y="195">A5</text>
+  </g>
+</svg>
 
-<br/>
-<a href="lesson4.html">← Back to Lesson 4</a>
-<a href="index.html">Course Home</a>
+<p>
+Analog pins measure voltages between <strong>0V and 5V</strong>.
+</p>
+</div>
+
+<div class="card">
+<h2>Potentiometer (Variable Resistor)</h2>
+
+<p>
+A potentiometer lets us control voltage manually.
+It has <strong>three pins</strong>:
+</p>
+
+<ul>
+<li>5V</li>
+<li>Signal (to A0)</li>
+<li>GND</li>
+</ul>
+
+<svg viewBox="0 0 800 200">
+  <rect x="80" y="80" width="200" height="40" rx="10" fill="#ccc"/>
+  <circle cx="180" cy="100" r="18" fill="#999"/>
+  <text x="180" y="150" text-anchor="middle">Knob</text>
+
+  <line x1="80" y1="100" x2="20" y2="100" stroke="black" stroke-width="4"/>
+  <line x1="280" y1="100" x2="360" y2="100" stroke="black" stroke-width="4"/>
+  <line x1="180" y1="120" x2="180" y2="170" stroke="black" stroke-width="4"/>
+
+  <text x="20" y="90">5V</text>
+  <text x="360" y="90">GND</text>
+  <text x="180" y="190">Signal → A0</text>
+</svg>
+</div>
+
+<div class="card">
+<h2>Interactive Analog Reading</h2>
+
+<p>
+Move the slider to simulate turning the potentiometer.
+</p>
+
+<input type="range" min="0" max="1023" value="512" oninput="updateAnalog(this.value)">
+<div class="output-box" id="analogValue">Analog Read: 512</div>
+
+<p>
+Arduino reads analog values from <strong>0 to 1023</strong>.
+</p>
+</div>
+
+<div class="card">
+<h2>Arduino Code</h2>
+
+<pre>
+int potPin = A0;
+int value;
+
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  value = analogRead(potPin);
+  Serial.println(value);
+  delay(200);
+}
+</pre>
+
+<p>
+The ADC converts voltage into a number you can use in code.
+</p>
+</div>
+
+<div class="card" id="quiz">
+<h2>Lesson 5 Quiz</h2>
+
+<p><strong>Question:</strong> What range does <code>analogRead()</code> return?</p>
+
+<button onclick="checkAnswer(true)">0 – 1023</button><br><br>
+<button onclick="checkAnswer(false)">0 – 255</button>
+
+<p id="quizFeedback"></p>
+</div>
+
+<div class="nav" id="lockedNav">
+  <a href="lesson4.html">⬅ Lesson 4</a>
+</div>
+
+<div class="nav hidden" id="unlockedNav">
+  <a href="lesson4.html">⬅ Lesson 4</a>
+  <a href="lesson6.html">Lesson 6 ➡</a>
+</div>
 
 <script>
-  let wiredPin = null;
-  const led = document.getElementById("led");
-  const status = document.getElementById("status");
+function updateAnalog(value) {
+  document.getElementById("analogValue").textContent =
+    "Analog Read: " + value;
+}
 
-  document.querySelectorAll(".wire").forEach(wire => {
-    wire.addEventListener("dragstart", e => {
-      e.dataTransfer.setData("pin", wire.dataset.pin);
-    });
-  });
+function checkAnswer(correct) {
+  const feedback = document.getElementById("quizFeedback");
 
-  led.addEventListener("dragover", e => e.preventDefault());
-
-  led.addEventListener("drop", e => {
-    e.preventDefault();
-    wiredPin = e.dataTransfer.getData("pin");
-    status.innerText = "LED wired to " + wiredPin;
-  });
-
-  function runCode() {
-    const code = document.getElementById("code").value;
-
-    if (!wiredPin) {
-      alert("Wire the LED first!");
-      return;
-    }
-
-    const writeMatch = code.match(/digitalWrite\\((D\\d),\\s*(HIGH|LOW)\\)/);
-
-    if (!writeMatch) {
-      alert("No digitalWrite() found");
-      return;
-    }
-
-    const pin = writeMatch[1];
-    const value = writeMatch[2];
-
-    if (pin !== wiredPin) {
-      alert("Code pin does not match wiring!");
-      return;
-    }
-
-    if (value === "HIGH") {
-      led.classList.add("on");
-      status.innerText = "LED ON via " + pin;
-    } else {
-      led.classList.remove("on");
-      status.innerText = "LED OFF via " + pin;
-    }
+  if (correct) {
+    feedback.textContent = "Correct! Analog values range from 0 to 1023.";
+    feedback.style.color = "green";
+    document.getElementById("lockedNav").classList.add("hidden");
+    document.getElementById("unlockedNav").classList.remove("hidden");
+    localStorage.setItem("lesson5Passed", "true");
+  } else {
+    feedback.textContent = "Incorrect. Think ADC resolution.";
+    feedback.style.color = "red";
   }
+}
 </script>
 
 </body>
 </html>
-<a href="lesson6.html">Go to Lesson 6</a>
-
