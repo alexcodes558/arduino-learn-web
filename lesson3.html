@@ -1,191 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Module 2 – Variables</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<title>Module 2 – Variables (Visual)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background:#f4f6f8;
-      margin:0;
-      line-height:1.7;
-    }
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background:#f4f6f8;
+  margin:0;
+  line-height:1.7;
+}
 
-    header {
-      background: linear-gradient(135deg, #2c7dc9, #4aa0e6);
-      color:white;
-      padding:50px 20px;
-      text-align:center;
-    }
+header {
+  background: linear-gradient(135deg, #2c7dc9, #4aa0e6);
+  color:white;
+  padding:50px 20px;
+  text-align:center;
+}
 
-    main {
-      max-width:1000px;
-      margin:auto;
-      padding:40px 20px;
-    }
+main {
+  max-width:1000px;
+  margin:auto;
+  padding:40px 20px;
+}
 
-    .card {
-      background:white;
-      padding:35px;
-      border-radius:12px;
-      box-shadow:0 6px 15px rgba(0,0,0,.15);
-      margin-bottom:30px;
-    }
+.card {
+  background:white;
+  padding:35px;
+  border-radius:12px;
+  box-shadow:0 6px 15px rgba(0,0,0,.15);
+  margin-bottom:30px;
+}
 
-    code {
-      display:block;
-      background:#eee;
-      padding:15px;
-      border-radius:6px;
-      margin:15px 0;
-      white-space:pre-wrap;
-    }
+code {
+  display:block;
+  background:#eee;
+  padding:15px;
+  border-radius:6px;
+  margin:15px 0;
+}
 
-    .button {
-      display:inline-block;
-      padding:14px 28px;
-      background:#2c7dc9;
-      color:white;
-      text-decoration:none;
-      border-radius:8px;
-      font-weight:bold;
-      border:none;
-      cursor:pointer;
-      margin-top:10px;
-    }
+.button {
+  display:inline-block;
+  padding:14px 28px;
+  background:#2c7dc9;
+  color:white;
+  border-radius:8px;
+  font-weight:bold;
+  border:none;
+  cursor:pointer;
+}
 
-    .quiz button {
-      width:100%;
-      margin-bottom:10px;
-    }
+.quiz button {
+  width:100%;
+  margin-bottom:10px;
+}
 
-    .hidden {
-      display:none;
-    }
-  </style>
+.hidden { display:none; }
+
+/* VISUAL DIAGRAMS */
+.memory {
+  display:flex;
+  gap:20px;
+  margin-top:20px;
+}
+
+.mem-box {
+  flex:1;
+  border:2px solid #2c7dc9;
+  border-radius:10px;
+  padding:15px;
+  text-align:center;
+  font-weight:bold;
+}
+
+.loop-diagram {
+  border:2px dashed #4aa0e6;
+  padding:20px;
+  text-align:center;
+  border-radius:10px;
+  margin-top:15px;
+}
+</style>
 </head>
 
 <body>
 
 <header>
   <h1>Module 2</h1>
-  <p>Understanding Variables</p>
+  <p>Variables — Seeing How Memory Works</p>
 </header>
 
 <main>
 
-  <div class="card">
-    <h2>🧠 What a Variable Really Is</h2>
-    <p>
-      A variable is a named place in memory where Arduino stores information.
-    </p>
-    <p>
-      Think of memory as a row of boxes. A variable is a label on one of those boxes.
-    </p>
-    <p>
-      Instead of remembering a number, Arduino remembers the box name.
-    </p>
-  </div>
+<div class="card">
+<h2>🧠 What a Variable Really Is</h2>
+<p>
+A variable is a <strong>named memory box</strong> inside the Arduino.
+</p>
+<p>
+The name lets you find that box again later.
+</p>
 
-  <div class="card">
-    <h2>📦 Why Variables Exist</h2>
-    <p>
-      Without variables, you would have to hard-code every number.
-    </p>
-    <p>
-      Variables allow Arduino to:
-    </p>
-    <ul>
-      <li>Remember values</li>
-      <li>Change behavior</li>
-      <li>React to sensors</li>
-    </ul>
-  </div>
+<div class="memory">
+  <div class="mem-box">count<br><small>int</small><br>5</div>
+  <div class="mem-box">temperature<br><small>float</small><br>22.5</div>
+  <div class="mem-box">buttonPressed<br><small>bool</small><br>false</div>
+</div>
+</div>
 
-  <div class="card">
-    <h2>🔢 Types Matter</h2>
-    <p>
-      Arduino needs to know what kind of data you are storing.
-    </p>
-    <code>
+<div class="card">
+<h2>📦 Why Variables Matter</h2>
+<p>
+Without variables, Arduino would forget everything every moment.
+</p>
+<p>
+Variables allow Arduino to:
+</p>
+<ul>
+  <li>Remember sensor readings</li>
+  <li>Track time</li>
+  <li>Make decisions</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>🔢 Variable Types</h2>
+<p>
+Different boxes store different kinds of data.
+</p>
+
+<code>
 int ledPin = 13;
-float temperature = 22.5;
-bool buttonPressed = false;
-    </code>
-    <p>
-      Each type uses memory differently. Choosing the right one matters.
-    </p>
-  </div>
+float voltage = 4.85;
+bool lightOn = true;
+</code>
 
-  <div class="card">
-    <h2>🔁 Variables and loop()</h2>
-    <p>
-      Variables keep their value between loop cycles.
-    </p>
-    <p>
-      This is how Arduino remembers what happened before.
-    </p>
-    <code>
+<p>
+Choosing the correct type prevents bugs and saves memory.
+</p>
+</div>
+
+<div class="card">
+<h2>🔁 Variables and loop()</h2>
+<p>
+The key idea:
+</p>
+<p><strong>Variables keep their values between loop cycles.</strong></p>
+
+<div class="loop-diagram">
+loop() runs → value changes → loop() runs again → value remembered
+</div>
+
+<code>
 int count = 0;
 
 void loop() {
   count = count + 1;
 }
-    </code>
-  </div>
+</code>
 
-  <div class="card">
-    <h2>🚫 Common Beginner Mistake</h2>
-    <p>
-      Declaring variables inside <code>loop()</code> when they need to persist.
-    </p>
-    <p>
-      Variables declared inside a function can be reset each cycle.
-    </p>
-  </div>
+<p>
+Each loop pass increases <code>count</code>. It does NOT reset.
+</p>
+</div>
 
-  <div class="card quiz">
-    <h2>✅ Check Your Understanding</h2>
-    <p><strong>Question:</strong> Why do variables need names?</p>
+<div class="card">
+<h2>🚫 Common Beginner Mistake</h2>
+<p>
+Declaring variables inside <code>loop()</code> when they need to persist.
+</p>
+<p>
+Those variables are recreated each cycle.
+</p>
+</div>
 
-    <button class="button" onclick="checkAnswer(true)">
-      To reference stored data later
-    </button>
-    <button class="button" onclick="checkAnswer(false)">
-      To make code longer
-    </button>
+<div class="card quiz">
+<h2>✅ Check Your Understanding</h2>
+<p><strong>Question:</strong> Why do variables keep their values?</p>
 
-    <p id="feedback"></p>
-  </div>
+<button class="button" onclick="checkAnswer(true)">
+Because memory persists between loop cycles
+</button>
 
-  <div class="card hidden" id="passed">
-    <h2>🎉 Module 2 Completed</h2>
-    <p>
-      Variables are the foundation of logic, sensors, and control.
-    </p>
+<button class="button" onclick="checkAnswer(false)">
+Because loop() only runs once
+</button>
 
-    <a class="button" href="coding_course.html">Back to Coding Course</a>
-  </div>
+<p id="feedback"></p>
+</div>
+
+<div class="card hidden" id="passed">
+<h2>🎉 Module 2 Completed</h2>
+<p>
+You now understand how Arduino remembers information.
+</p>
+
+<a class="button" href="coding_course.html">Back to Coding Course</a>
+</div>
 
 </main>
 
 <script>
-  function checkAnswer(correct) {
-    const feedback = document.getElementById("feedback");
+function checkAnswer(correct) {
+  const feedback = document.getElementById("feedback");
 
-    if (correct) {
-      feedback.textContent = "Correct! Variables let Arduino remember values.";
-      feedback.style.color = "green";
-
-      localStorage.setItem("module2Complete", "true");
-      document.getElementById("passed").classList.remove("hidden");
-    } else {
-      feedback.textContent = "Not quite. Think about memory and recall.";
-      feedback.style.color = "red";
-    }
+  if (correct) {
+    feedback.textContent = "Correct! Variables live in memory.";
+    feedback.style.color = "green";
+    localStorage.setItem("module2Complete", "true");
+    document.getElementById("passed").classList.remove("hidden");
+  } else {
+    feedback.textContent = "Not quite. Think about memory.";
+    feedback.style.color = "red";
   }
+}
 </script>
 
 </body>
