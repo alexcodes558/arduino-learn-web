@@ -149,11 +149,66 @@
 analogWrite(9, 128); // 50% brightness
   </pre>
 </div>
+<div class="card">
+  <h2>🧱 Breadboard Layout (Realistic)</h2>
 
-<div class="nav">
+  <svg viewBox="0 0 900 260" width="100%" style="background:#f0f0f0; border-radius:12px;">
+    
+    <!-- Power rails -->
+    <rect x="40" y="40" width="820" height="28" fill="#ffd6d6"/>
+    <rect x="40" y="192" width="820" height="28" fill="#d6e6ff"/>
+
+    <!-- Left rows -->
+    <g fill="#ccc">
+      <rect x="100" y="90" width="260" height="18"/>
+      <rect x="100" y="120" width="260" height="18"/>
+      <rect x="100" y="150" width="260" height="18"/>
+    </g>
+
+    <!-- Right rows -->
+    <g fill="#ccc">
+      <rect x="540" y="90" width="260" height="18"/>
+      <rect x="540" y="120" width="260" height="18"/>
+      <rect x="540" y="150" width="260" height="18"/>
+    </g>
+
+    <!-- Center gap -->
+    <rect x="420" y="80" width="60" height="100" fill="#fff"/>
+
+    <!-- Labels -->
+    <text x="450" y="75" text-anchor="middle" font-size="14">CENTER GAP</text>
+    <text x="450" y="60" text-anchor="middle" font-size="12">No connection</text>
+
+    <text x="80" y="60" font-size="12">+5V Rail</text>
+    <text x="80" y="215" font-size="12">GND Rail</text>
+  </svg>
+
+  <p>
+    Each horizontal row is electrically connected.
+    The center gap separates the two sides of the board.
+  </p>
+</div>
+
+<div class="card" id="quiz">
+  <h2>✅ Lesson 4 Quiz</h2>
+
+  <p><strong>Question:</strong> What does PWM actually change?</p>
+
+  <button onclick="checkAnswer(true)">How long the pin stays ON</button><br><br>
+  <button onclick="checkAnswer(false)">The voltage level itself</button>
+
+  <p id="quizFeedback"></p>
+</div>
+
+<div class="nav" id="navLocked">
+  <a href="lesson3.html">⬅ Lesson 3</a>
+</div>
+
+<div class="nav" id="navUnlocked" style="display:none;">
   <a href="lesson3.html">⬅ Lesson 3</a>
   <a href="lesson5.html">Lesson 5 ➡</a>
 </div>
+
 
 <script>
   function setBrightness(value) {
@@ -162,6 +217,22 @@ analogWrite(9, 128); // 50% brightness
     led.style.opacity = value / 255;
     text.textContent = "PWM Value: " + value;
   }
+</script>
+<script>
+function checkAnswer(correct) {
+  const feedback = document.getElementById("quizFeedback");
+
+  if (correct) {
+    feedback.textContent = "Correct! PWM changes duty cycle, not voltage.";
+    feedback.style.color = "green";
+    document.getElementById("navUnlocked").style.display = "flex";
+    document.getElementById("navLocked").style.display = "none";
+    localStorage.setItem("lesson4Passed", "true");
+  } else {
+    feedback.textContent = "Incorrect. Arduino pins are still digital.";
+    feedback.style.color = "red";
+  }
+}
 </script>
 
 </body>
