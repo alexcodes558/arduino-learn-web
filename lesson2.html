@@ -1,232 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lesson 2 – Buttons & Input</title>
-<style>
-body { margin:0; font-family: system-ui, Arial, sans-serif; background:#0f172a; color:#e5e7eb; }
-header { background:#020617; padding:25px; text-align:center; }
-header h1 { margin:0; color:#38bdf8; }
-.section { max-width:1000px; margin:auto; padding:25px; }
-.card { background:#111827; border-radius:12px; padding:20px; margin-bottom:20px; }
-h2 { color:#38bdf8; }
-p { line-height:1.6; }
-.code { background:#020617; padding:15px; border-radius:8px; font-family:monospace; color:#7dd3fc; overflow-x:auto; }
-.diagram { text-align:center; margin-bottom:20px; }
-svg { width:100%; max-width:600px; border:1px solid #334155; border-radius:8px; background:#1e293b; }
-.wire { stroke:#64748b; stroke-width:4; cursor:pointer; }
-.wire.flow { stroke:#22c55e; stroke-width:6; }
-.led-off { fill:#374151; }
-.led-on { fill:red; filter: drop-shadow(0 0 10px red); }
-.button-off { fill:#64748b; cursor:pointer; }
-.button-on { fill:#22c55e; cursor:pointer; }
-button { padding:10px 16px; margin-top:10px; font-size:16px; cursor:pointer; border-radius:6px; border:none; }
-.tooltip { display:none; position:absolute; background:#1f2933; color:white; padding:8px; border-radius:6px; font-size:14px; }
-.quiz button { margin:8px 0; padding:10px; width:100%; font-size:16px; cursor:pointer; border-radius:6px; border:none; }
-.correct { background:#22c55e; color:black; }
-.wrong { background:#ef4444; color:white; }
-.hidden { display:none; }
-.next { display:inline-block; margin-top:15px; padding:12px 18px; background:#38bdf8; color:#020617; text-decoration:none; border-radius:8px; font-weight:bold; }
-</style>
+  <meta charset="UTF-8">
+  <title>Module 1 – setup() and loop()</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      line-height: 1.7;
+    }
+
+    header {
+      background: linear-gradient(135deg, #2c7dc9, #4aa0e6);
+      color: white;
+      padding: 50px 20px;
+      text-align: center;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 35px;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+      margin-bottom: 30px;
+    }
+
+    code {
+      display: block;
+      background: #eee;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 15px 0;
+      white-space: pre-wrap;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 14px 28px;
+      background: #2c7dc9;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .quiz button {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
+
 <body>
 
 <header>
-<h1>Lesson 2: Buttons & Input</h1>
+  <h1>Module 1</h1>
+  <p>Understanding setup() and loop()</p>
 </header>
 
-<div class="section">
+<main>
 
-<!-- Reading / Learning Section -->
-<div class="card">
-<h2>Learning Section</h2>
-<p>In this lesson, we will learn how to use buttons with Arduino and understand how inputs and outputs work. You will learn about:</p>
-<ul>
-<li><b>Input vs Output:</b> Inputs read signals from sensors or buttons. Outputs control LEDs, motors, and other devices.</li>
-<li><b>HIGH vs LOW:</b> HIGH means the pin is receiving voltage, LOW means 0 volts.</li>
-<li><b>Pull-up / Pull-down resistors:</b> These resistors prevent pins from "floating," which can cause random readings.</li>
-<li><b>Button bouncing:</b> Pressing a button can cause the pin to rapidly switch HIGH/LOW before stabilizing.</li>
-<li><b>Logic Basics:</b> OR logic: LED lights if any button is pressed. AND logic: LED lights only if all buttons are pressed.</li>
-</ul>
-<p>Once you understand these concepts, try the interactive simulations below!</p>
-</div>
+  <!-- READING -->
+  <div class="card">
+    <h2>📘 Why Arduino Has Two Functions</h2>
 
-<!-- Interactive Demo Section -->
-<div class="card diagram">
-<h2>Demo 1: Single Button → LED</h2>
-<p>Click the button to turn the LED on/off. Hover pins to see tooltips.</p>
-<svg viewBox="0 0 600 250">
-<!-- Arduino -->
-<rect x="20" y="60" width="100" height="80" rx="10" fill="#1f2933"/>
-<text x="70" y="105" fill="white" text-anchor="middle">Arduino</text>
+    <p>
+      Arduino does not use a normal program structure.
+      There is no <code>main()</code> that you manage.
+    </p>
 
-<!-- Button -->
-<rect id="btn1" x="200" y="60" width="40" height="20" rx="4" class="button-off"/>
-<text x="220" y="55" fill="#9ca3af" text-anchor="middle">Button</text>
+    <p>
+      Instead, Arduino gives you two places to write code.
+      Each place exists for a specific reason.
+    </p>
+  </div>
 
-<!-- LED -->
-<circle id="led1" cx="200" cy="150" r="12" class="led-off"/>
-<text x="200" y="170" fill="#9ca3af" text-anchor="middle">LED</text>
+  <!-- SETUP -->
+  <div class="card">
+    <h2>⚙️ setup() — One-Time Preparation</h2>
 
-<!-- Wire -->
-<line id="wire1" x1="220" y1="80" x2="200" y2="138" class="wire"/>
-</svg>
-<button onclick="pressButton(1)">Press / Release Button</button>
-<p id="stateText1"></p>
-</div>
+    <p>
+      <code>setup()</code> runs exactly one time when the Arduino turns on.
+    </p>
 
-<!-- Demo 2: Two Buttons OR Logic -->
-<div class="card diagram">
-<h2>Demo 2: Two Buttons → LED (OR Logic)</h2>
-<p>LED lights if either button is pressed.</p>
-<svg viewBox="0 0 600 250">
-<!-- Arduino -->
-<rect x="20" y="60" width="100" height="80" rx="10" fill="#1f2933"/>
-<text x="70" y="105" fill="white" text-anchor="middle">Arduino</text>
+    <p>
+      It is used to:
+    </p>
 
-<!-- Buttons -->
-<rect id="btn2a" x="200" y="60" width="40" height="20" rx="4" class="button-off"/>
-<text x="220" y="55" fill="#9ca3af" text-anchor="middle">Button 1</text>
+    <ul>
+      <li>Configure pins</li>
+      <li>Start serial communication</li>
+      <li>Set initial states</li>
+    </ul>
 
-<rect id="btn2b" x="260" y="60" width="40" height="20" rx="4" class="button-off"/>
-<text x="280" y="55" fill="#9ca3af" text-anchor="middle">Button 2</text>
-
-<!-- LED -->
-<circle id="led2" cx="230" cy="150" r="12" class="led-off"/>
-<text x="230" y="170" fill="#9ca3af" text-anchor="middle">LED</text>
-
-<!-- Wires -->
-<line id="wire2a" x1="220" y1="80" x2="220" y2="138" class="wire"/>
-<line id="wire2b" x1="280" y1="80" x2="240" y2="138" class="wire"/>
-</svg>
-<button onclick="pressTwoButtons()">Press / Release Buttons</button>
-<p id="stateText2"></p>
-</div>
-
-<!-- Challenge: Drag Wires -->
-<div class="card diagram">
-<h2>Challenge: Drag & Connect Wires</h2>
-<p>Drag wires to connect buttons to LEDs. LED lights only if wiring is correct. Multiple wires are available below.</p>
-<svg viewBox="0 0 600 250" id="challengeSvg">
-<rect x="20" y="60" width="100" height="80" rx="10" fill="#1f2933"/>
-<text x="70" y="105" fill="white" text-anchor="middle">Arduino</text>
-
-<rect id="btnC" x="200" y="60" width="40" height="20" rx="4" class="button-off"/>
-<text x="220" y="55" fill="#9ca3af" text-anchor="middle">Button</text>
-
-<circle id="ledC" cx="300" cy="150" r="12" class="led-off"/>
-<text x="300" y="170" fill="#9ca3af" text-anchor="middle">LED</text>
-
-<!-- Wires available for drag -->
-<line id="wireC1" x1="220" y1="80" x2="220" y2="150" class="wire"/>
-<line id="wireC2" x1="220" y1="80" x2="300" y2="138" class="wire"/>
-<line id="wireC3" x1="220" y1="80" x2="300" y2="150" class="wire"/>
-</svg>
-<p>Drag wires to connect Button → LED correctly. LED lights green if correct.</p>
-</div>
-
-<!-- Code Section -->
-<div class="card">
-<h2>Code Example</h2>
-<div class="code">
-void setup() {<br>
-&nbsp;&nbsp;pinMode(2, INPUT);<br>
-&nbsp;&nbsp;pinMode(3, INPUT);<br>
-&nbsp;&nbsp;pinMode(12, OUTPUT);<br>
-&nbsp;&nbsp;pinMode(13, OUTPUT);<br>
-}<br><br>
-void loop() {<br>
-&nbsp;&nbsp;if(digitalRead(2)==HIGH || digitalRead(3)==HIGH) digitalWrite(13,HIGH);<br>
-&nbsp;&nbsp;if(digitalRead(2)==HIGH &amp;&amp; digitalRead(3)==HIGH) digitalWrite(12,HIGH);<br>
-&nbsp;&nbsp;else digitalWrite(12,LOW);<br>
+    <code>
+void setup() {
+  pinMode(13, OUTPUT);
 }
-</div>
-</div>
+    </code>
 
-<!-- Quiz -->
-<div class="card quiz">
-<h2>Quiz</h2>
-<p>1. Which logic lights LED when either button is pressed?</p>
-<button onclick="wrong(this)">AND</button>
-<button onclick="correct(this)">OR</button>
+    <p>
+      You should NOT put repeating behavior in <code>setup()</code>.
+    </p>
+  </div>
 
-<p>2. Which logic lights LED only if both buttons are pressed?</p>
-<button onclick="correct(this)">AND</button>
-<button onclick="wrong(this)">OR</button>
+  <!-- LOOP -->
+  <div class="card">
+    <h2>🔁 loop() — Behavior Forever</h2>
 
-<p>3. What prevents a floating pin?</p>
-<button onclick="correct(this)">Pull-up / Pull-down resistor</button>
-<button onclick="wrong(this)">Nothing</button>
+    <p>
+      After <code>setup()</code> finishes, Arduino enters <code>loop()</code>.
+    </p>
 
-<p id="quizResult"></p>
-<a id="nextLesson" class="next hidden" href="lesson3.html">Go to Lesson 3 →</a>
-</div>
+    <p>
+      When <code>loop()</code> reaches the end, it immediately starts again.
+    </p>
 
-</div>
+    <code>
+void loop() {
+  digitalWrite(13, HIGH);
+}
+    </code>
+
+    <p>
+      Think of <code>loop()</code> as the Arduino’s heartbeat.
+    </p>
+  </div>
+
+  <!-- COMMON MISTAKES -->
+  <div class="card">
+    <h2>🚫 Common Beginner Mistake</h2>
+
+    <p>
+      Beginners often expect code to “finish.”
+    </p>
+
+    <p>
+      Arduino code never finishes.
+      It only changes behavior over time.
+    </p>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="card quiz">
+    <h2>✅ Check Your Understanding</h2>
+
+    <p><strong>Question:</strong> Where should repeating behavior go?</p>
+
+    <button class="button" onclick="checkAnswer(false)">setup()</button>
+    <button class="button" onclick="checkAnswer(true)">loop()</button>
+
+    <p id="feedback"></p>
+  </div>
+
+  <!-- PASSED -->
+  <div class="card hidden" id="passed">
+    <h2>🎉 Module 1 Completed</h2>
+
+    <p>
+      You now understand the most important concept in Arduino programming.
+    </p>
+
+    <a class="button" href="lesson3.html">Continue to Module 2</a>
+    <a class="button" href="coding_course.html">Back to Coding Course</a>
+  </div>
+
+</main>
 
 <script>
-// Demo 1
-let btn1State=false;
-function pressButton(num){
-  btn1State=!btn1State;
-  const led1=document.getElementById("led1");
-  const wire1=document.getElementById("wire1");
-  const state=document.getElementById("stateText1");
-  const btn=document.getElementById("btn1");
-  btn.setAttribute("class",btn1State?"button-on":"button-off");
-  if(btn1State){
-    led1.setAttribute("class","led-on");
-    wire1.classList.add("flow");
-    state.innerText="Button pressed → LED ON";
-  } else {
-    led1.setAttribute("class","led-off");
-    wire1.classList.remove("flow");
-    state.innerText="Button released → LED OFF";
+  function checkAnswer(correct) {
+    const feedback = document.getElementById("feedback");
+
+    if (correct) {
+      feedback.textContent = "Correct! loop() handles repeating behavior.";
+      feedback.style.color = "green";
+
+      localStorage.setItem("module1Complete", "true");
+      document.getElementById("passed").classList.remove("hidden");
+    } else {
+      feedback.textContent = "Not quite. Think about behavior over time.";
+      feedback.style.color = "red";
+    }
   }
-}
-
-// Demo 2
-let btn2State=[false,false];
-function pressTwoButtons(){
-  btn2State[0]=!btn2State[0];
-  btn2State[1]=!btn2State[1];
-  const led2=document.getElementById("led2");
-  const state=document.getElementById("stateText2");
-  const btnA=document.getElementById("btn2a");
-  const btnB=document.getElementById("btn2b");
-  btnA.setAttribute("class",btn2State[0]?"button-on":"button-off");
-  btnB.setAttribute("class",btn2State[1]?"button-on":"button-off");
-  if(btn2State[0] || btn2State[1]) led2.setAttribute("class","led-on");
-  else led2.setAttribute("class","led-off");
-  state.innerText=`Button1: ${btn2State[0]?"Pressed":"Released"}, Button2: ${btn2State[1]?"Pressed":"Released"}`;
-}
-
-// Quiz
-function correct(btn){
-  btn.classList.add("correct");
-  document.getElementById("quizResult").innerText="✅ Correct!";
-  document.getElementById("nextLesson").classList.remove("hidden");
-}
-function wrong(btn){
-  btn.classList.add("wrong");
-  document.getElementById("quizResult").innerText="❌ Not correct. Try again.";
-}
-
-// Tooltip for buttons
-const tooltip=document.createElement("div");
-tooltip.classList.add("tooltip");
-tooltip.innerText="Click a button to simulate HIGH input.";
-document.body.appendChild(tooltip);
-const buttons=[document.getElementById("btn1"),document.getElementById("btn2a"),document.getElementById("btn2b")];
-buttons.forEach(btn=>{
-  btn.addEventListener("mouseenter",e=>{
-    tooltip.style.display="block";
-    tooltip.style.left=e.pageX+10+"px";
-    tooltip.style.top=e.pageY+10+"px";
-  });
-  btn.addEventListener("mouseleave",()=>{tooltip.style.display="none";});
-});
 </script>
 
 </body>
