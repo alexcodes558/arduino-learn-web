@@ -100,7 +100,38 @@ This is how Arduino communicates with the outside world.
 These are real physical pins on the board.
 </p>
 
-<img src="images/arduino_uno_labeled.jpg" alt="Arduino Uno digital pins labeled">
+<div class="card">
+  <h2>🔌 Arduino Digital Pins (Diagram)</h2>
+
+  <svg width="100%" viewBox="0 0 700 200" style="background:#fdfdfd; border-radius:10px;">
+    <rect x="20" y="50" width="660" height="100" rx="20" fill="#2c7dc9"/>
+    
+    <!-- Pins -->
+    <g fill="#fff">
+      <rect x="60" y="30" width="30" height="40"/>
+      <rect x="120" y="30" width="30" height="40"/>
+      <rect x="180" y="30" width="30" height="40"/>
+      <rect x="240" y="30" width="30" height="40"/>
+      <rect x="300" y="30" width="30" height="40"/>
+      <rect x="360" y="30" width="30" height="40"/>
+    </g>
+
+    <!-- Labels -->
+    <g fill="#000" font-size="14" text-anchor="middle">
+      <text x="75" y="25">13</text>
+      <text x="135" y="25">12</text>
+      <text x="195" y="25">11</text>
+      <text x="255" y="25">10</text>
+      <text x="315" y="25">9</text>
+      <text x="375" y="25">8</text>
+    </g>
+  </svg>
+
+  <p>
+    Each white rectangle represents a real metal pin on the Arduino.
+    These pins can be set HIGH or LOW.
+  </p>
+</div>
 
 <p>
 Pins <strong>0–13</strong> can be used as digital pins.
@@ -138,7 +169,35 @@ This is how LEDs, relays, and motors are controlled.
 <div class="card">
 <h2>📷 Digital Pins + Breadboard</h2>
 
-<img src="images/breadboard_labeled.jpg" alt="Breadboard labeled">
+<div class="card">
+  <h2>🧱 Breadboard Connections (Diagram)</h2>
+
+  <svg width="100%" viewBox="0 0 700 250" style="background:#fdfdfd; border-radius:10px;">
+    <!-- Power rails -->
+    <rect x="20" y="30" width="660" height="30" fill="#ffdddd"/>
+    <rect x="20" y="190" width="660" height="30" fill="#ddeeff"/>
+
+    <!-- Rows -->
+    <g fill="#ccc">
+      <rect x="100" y="80" width="200" height="20"/>
+      <rect x="100" y="110" width="200" height="20"/>
+      <rect x="100" y="140" width="200" height="20"/>
+
+      <rect x="400" y="80" width="200" height="20"/>
+      <rect x="400" y="110" width="200" height="20"/>
+      <rect x="400" y="140" width="200" height="20"/>
+    </g>
+
+    <!-- Center gap -->
+    <rect x="330" y="70" width="40" height="110" fill="#fff"/>
+  </svg>
+
+  <p>
+    Holes in each horizontal row are internally connected.
+    The center gap separates the two sides.
+  </p>
+</div>
+
 
 <p>
 The breadboard lets you route signals safely.
